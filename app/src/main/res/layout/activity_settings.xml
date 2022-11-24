@@ -1,60 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <!--    <FrameLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content">-->
 
-        <ImageView
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:src="@drawable/arrow_back" />
+    <!--        <ImageView-->
+    <!--            android:layout_width="@dimen/padding_large"-->
+    <!--            android:layout_height="@dimen/padding_large"-->
+    <!--            android:layout_marginStart="20dp"-->
+    <!--            android:layout_marginTop="20dp"-->
+    <!--            android:src="@drawable/arrow_back" />-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="64dp"
-            android:layout_marginTop="14dp"
-            android:text="@string/settings"
-            android:textColor="@color/black"
-            android:textSize="22sp" />
+    <!--        <TextView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginStart="64dp"-->
+    <!--            android:layout_marginTop="14dp"-->
+    <!--            android:text="@string/settings"-->
+    <!--            android:textColor="@color/black"-->
+    <!--            android:textSize="@dimen/text_normal" />-->
 
-    </FrameLayout>
+    <!--    </FrameLayout>-->
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="61dp"
-        android:layout_marginTop="40dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:drawablePadding="28dp"
+        android:text="@string/settings"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_normal"
+        app:drawableStartCompat="@drawable/arrow_back" />
 
-        <TextView
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:gravity="center_vertical"
-            android:text="@string/dark_theme"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:layout_height="61dp"
+            android:layout_marginTop="40dp"
+            android:paddingStart="@dimen/padding_large"
+            android:paddingEnd="@dimen/padding_large">
 
-        <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|end" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:gravity="center_vertical"
+                android:text="@string/dark_theme"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_small" />
 
-    </FrameLayout>
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end" />
+
+        </FrameLayout>
+
+<!--    <Switch-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="61dp"-->
+<!--        android:layout_marginTop="40dp"-->
+<!--        android:drawableEnd="@color/black"-->
+<!--        android:paddingStart="@dimen/padding_large"-->
+<!--        android:paddingEnd="@dimen/padding_large"-->
+<!--        android:text="@string/dark_theme"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textSize="@dimen/text_small"/>-->
+
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="61dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp">
+        android:paddingStart="@dimen/padding_large"
+        android:paddingEnd="@dimen/padding_large">
 
         <TextView
             android:layout_width="match_parent"
@@ -63,7 +87,7 @@
             android:gravity="center_vertical"
             android:text="@string/share_app"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="@dimen/text_small" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -76,8 +100,8 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="61dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp">
+        android:paddingStart="@dimen/padding_large"
+        android:paddingEnd="@dimen/padding_large">
 
         <TextView
             android:layout_width="match_parent"
@@ -86,7 +110,7 @@
             android:gravity="center_vertical"
             android:text="@string/write_in_support"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="@dimen/text_small" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -99,8 +123,8 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="61dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp">
+        android:paddingStart="@dimen/padding_large"
+        android:paddingEnd="@dimen/padding_large">
 
         <TextView
             android:layout_width="match_parent"
@@ -109,7 +133,7 @@
             android:gravity="center_vertical"
             android:text="@string/user_agreement"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="@dimen/text_small" />
 
         <ImageView
             android:layout_width="wrap_content"

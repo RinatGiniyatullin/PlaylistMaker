@@ -12,8 +12,8 @@
         android:text="@string/app_name"
         android:textColor="@color/white"
         android:layout_marginTop="14dp"
-        android:layout_marginStart="16dp"
-        android:textSize="22sp" />
+        android:layout_marginStart="@dimen/padding_large"
+        android:textSize="@dimen/text_normal" />
 
     <Button
         android:id="@+id/search"
@@ -26,12 +26,12 @@
         android:backgroundTint="@color/white"
         android:text="@string/search"
         android:textColor="@color/black"
-        android:textSize="22sp"
+        android:textSize="@dimen/text_normal"
         app:icon="@drawable/search"
         app:iconGravity="textStart"
         app:iconPadding="10dp"
         app:iconTint="@color/black"
-        app:cornerRadius="16dp"
+        app:cornerRadius="@dimen/padding_large"
         android:foreground="?attr/selectableItemBackground"
         />
 
@@ -42,16 +42,16 @@
         android:layout_weight="1"
         android:layout_marginStart="17dp"
         android:layout_marginEnd="15dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/padding_large"
         android:backgroundTint="@color/white"
         android:text="@string/library"
         android:textColor="@color/black"
-        android:textSize="22sp"
+        android:textSize="@dimen/text_normal"
         app:icon="@drawable/library"
         app:iconGravity="textStart"
         app:iconPadding="10dp"
         app:iconTint="@color/black"
-        app:cornerRadius="16dp"
+        app:cornerRadius="@dimen/padding_large"
         android:foreground="?attr/selectableItemBackground"
         />
 
@@ -62,17 +62,17 @@
         android:layout_weight="1"
         android:layout_marginStart="17dp"
         android:layout_marginEnd="15dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/padding_large"
         android:layout_marginBottom="28dp"
         android:backgroundTint="@color/white"
         android:text="@string/settings"
         android:textColor="@color/black"
-        android:textSize="22sp"
+        android:textSize="@dimen/text_normal"
         app:icon="@drawable/settings"
         app:iconGravity="textStart"
         app:iconPadding="10dp"
         app:iconTint="@color/black"
-        app:cornerRadius="16dp"
+        app:cornerRadius="@dimen/padding_large"
         android:foreground="?attr/selectableItemBackground"
         />
 
