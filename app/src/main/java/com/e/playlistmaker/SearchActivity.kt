@@ -49,8 +49,7 @@ class SearchActivity : AppCompatActivity() {
 
         val buttonBack = findViewById<TextView>(R.id.search_back)
         buttonBack.setOnClickListener {
-            val backIntent = Intent(this, MainActivity::class.java)
-            startActivity(backIntent)
+            finish()
         }
 
 

@@ -6,28 +6,6 @@
     android:background="?attr/colorSecondaryVariant"
     android:orientation="vertical">
 
-    <!--    <FrameLayout-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content">-->
-
-    <!--        <ImageView-->
-    <!--            android:layout_width="@dimen/padding_large"-->
-    <!--            android:layout_height="@dimen/padding_large"-->
-    <!--            android:layout_marginStart="20dp"-->
-    <!--            android:layout_marginTop="20dp"-->
-    <!--            android:src="@drawable/arrow_back" />-->
-
-    <!--        <TextView-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_marginStart="64dp"-->
-    <!--            android:layout_marginTop="14dp"-->
-    <!--            android:text="@string/settings"-->
-    <!--            android:textColor="@color/black"-->
-    <!--            android:textSize="@dimen/text_normal" />-->
-
-    <!--    </FrameLayout>-->
-
     <TextView
         android:id="@+id/settings_back"
         android:layout_width="wrap_content"
@@ -54,21 +32,11 @@
             style="@style/TextStyle"
             android:text="@string/dark_theme" />
 
-        <Switch style="@style/ImageStyle" />
+        <Switch
+            android:id="@+id/switch_for_theme"
+            style="@style/ImageStyle" />
 
     </FrameLayout>
-
-    <!--    <Switch-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="61dp"-->
-    <!--        android:layout_marginTop="40dp"-->
-    <!--        android:drawableEnd="@color/black"-->
-    <!--        android:paddingStart="@dimen/padding_large"-->
-    <!--        android:paddingEnd="@dimen/padding_large"-->
-    <!--        android:text="@string/dark_theme"-->
-    <!--        android:textColor="@color/black"-->
-    <!--        android:textSize="@dimen/text_small"/>-->
-
 
     <FrameLayout
         android:layout_width="match_parent"

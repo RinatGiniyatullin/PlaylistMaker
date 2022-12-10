@@ -5,12 +5,19 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.Switch
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatDelegate
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
+
+        val switchForTheme = findViewById<Switch>(R.id.switch_for_theme)
+        switchForTheme.setOnCheckedChangeListener { v, isChecked ->
+            AppCompatDelegate.setDefaultNightMode(if (isChecked) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO)
+        }
 
         val shareApp = findViewById<TextView>(R.id.share_app)
         shareApp.setOnClickListener {
@@ -39,8 +46,7 @@ class SettingsActivity : AppCompatActivity() {
 
         val buttonBack = findViewById<TextView>(R.id.settings_back)
         buttonBack.setOnClickListener {
-            val backIntent = Intent(this, MainActivity::class.java)
-            startActivity(backIntent)
+            finish()
         }
     }
 }
