@@ -1,18 +1,17 @@
 package com.e.playlistmaker
 
 import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class SearchActivity : AppCompatActivity() {
     companion object {
@@ -52,7 +51,6 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
 
-
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
@@ -64,7 +62,12 @@ class SearchActivity : AppCompatActivity() {
                 input = s.toString()
             }
         }
+
         inputText.addTextChangedListener(textWatcher)
+
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = TrackAdapter(tracksList)
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
