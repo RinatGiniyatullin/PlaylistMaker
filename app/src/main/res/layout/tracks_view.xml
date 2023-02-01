@@ -11,17 +11,15 @@
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
         android:layout_gravity="center_vertical"
-        android:layout_marginStart="@dimen/icon_start"
-        android:layout_marginTop="@dimen/margin_small"
-        android:layout_marginBottom="@dimen/margin_small" />
+        android:layout_marginVertical="@dimen/margin_small"
+        android:layout_marginStart="@dimen/icon_start" />
 
     <LinearLayout
-        android:layout_width="@dimen/zero_width"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/margin_large"
         android:layout_marginStart="@dimen/margin_small"
-        android:layout_marginTop="@dimen/margin_large"
         android:layout_marginEnd="@dimen/margin_normal"
-        android:layout_marginBottom="@dimen/margin_large"
         android:layout_weight="1"
         android:orientation="vertical">
 

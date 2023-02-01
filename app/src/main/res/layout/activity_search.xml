@@ -40,7 +40,7 @@
 
         <EditText
             android:id="@+id/editText"
-            android:layout_width="@dimen/zero_width"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="9dp"
