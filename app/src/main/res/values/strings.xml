@@ -13,4 +13,5 @@
     <string name="mail_subject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="my_email">rin63@mail.ru</string>
     <string name="back">Назад</string>
+    <string name="download">Загрузка</string>
 </resources>
