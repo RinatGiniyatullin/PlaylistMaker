@@ -14,4 +14,7 @@
     <string name="my_email">rin63@mail.ru</string>
     <string name="back">Назад</string>
     <string name="download">Загрузка</string>
+    <string name="not_found">Ничего не нашлось</string>
+    <string name="no_connection">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="update">Обновить</string>
 </resources>

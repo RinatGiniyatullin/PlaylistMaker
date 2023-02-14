@@ -50,8 +50,10 @@
             android:color="?attr/colorOnPrimary"
             android:gravity="center_vertical"
             android:hint="@string/search"
+            android:imeOptions="actionDone"
             android:inputType="text"
             android:maxLines="1"
+            android:singleLine="true"
             android:textColor="?attr/colorOnPrimary"
             android:textColorHint="?attr/colorContainer"
             android:textCursorDrawable="@drawable/cursor"
@@ -75,7 +77,43 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="24dp"/>
+        android:layout_marginTop="24dp" />
+
+    <ImageView
+        android:id="@+id/error_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/close"
+        android:layout_marginTop="86dp" />
+
+    <TextView
+        android:id="@+id/error_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/padding_large"
+        android:fontFamily="@font/ys_display_medium"
+        android:textColor="?attr/colorSecondary"
+        android:textFontWeight="400"
+        android:textSize="19sp" />
+
+    <Button
+        android:id="@+id/update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="?attr/colorSecondary"
+        android:fontFamily="@font/ys_display_medium"
+        android:textAllCaps="false"
+        android:text="@string/update"
+        android:textColor="?attr/colorSecondaryVariant"
+        android:textFontWeight="500"
+        android:textSize="14sp"
+        app:cornerRadius="54dp" />
+
 
 </LinearLayout>
 
