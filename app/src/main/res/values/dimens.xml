@@ -13,4 +13,5 @@
     <dimen name="margin_s_small">1dp</dimen>
     <dimen name="margin_x_small">5dp</dimen>
     <dimen name="margin_s_normal">20dp</dimen>
+    <dimen name="margin_l_normal">24dp</dimen>
 </resources>
