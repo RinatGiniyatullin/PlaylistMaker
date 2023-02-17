@@ -1,13 +1,14 @@
 package com.e.playlistmaker
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import java.text.SimpleDateFormat
+import java.util.*
 
 class TrackViewHolder(parentView: ViewGroup) : RecyclerView.ViewHolder(
     LayoutInflater.from(parentView.context).inflate(R.layout.tracks_view, parentView, false)
@@ -17,7 +18,7 @@ class TrackViewHolder(parentView: ViewGroup) : RecyclerView.ViewHolder(
     private val artistNameView = itemView.findViewById<TextView>(R.id.artistName)
     private val trackTimeView = itemView.findViewById<TextView>(R.id.trackTime)
 
-    fun bind(model: Track) {
+    fun bind(model: ITunesAudio) {
         Glide.with(itemView)
             .load(model.artworkUrl100)
             .placeholder(R.drawable.close)
@@ -27,7 +28,8 @@ class TrackViewHolder(parentView: ViewGroup) : RecyclerView.ViewHolder(
 
         trackNameView.text = model.trackName
         artistNameView.text = model.artistName
-        trackTimeView.text = model.trackTime
+        trackTimeView.text =
+            SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTimeMillis)
     }
 }
 
