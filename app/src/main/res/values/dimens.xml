@@ -14,4 +14,6 @@
     <dimen name="margin_x_small">5dp</dimen>
     <dimen name="margin_s_normal">20dp</dimen>
     <dimen name="margin_l_normal">24dp</dimen>
+    <dimen name="height_for_settings">61dp</dimen>
+    <dimen name="button_radius">54dp</dimen>
 </resources>
