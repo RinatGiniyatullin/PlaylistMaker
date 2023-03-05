@@ -157,18 +157,16 @@ class SearchActivity : AppCompatActivity() {
 
         // нажатие на трек
         adapter.itemClickListener = { track ->
-            val arrayHistory = ArrayList<ITunesAudio>()
-            arrayHistory.addAll(historySearch.readFromJson())
-            if (arrayHistory.contains(track)) {
-                arrayHistory.remove(track)
-                arrayHistory.add(0, track)
+            if (audioHistory.contains(track)) {
+                audioHistory.remove(track)
+                audioHistory.add(0, track)
             } else {
-                arrayHistory.add(0, track)
+                audioHistory.add(0, track)
             }
-            if (arrayHistory.size == 10) {
-                arrayHistory.removeAt(9)
+            if (audioHistory.size == 10) {
+                audioHistory.removeAt(9)
             }
-            historySearch.writeToJson(arrayHistory)
+            historySearch.writeToJson(audioHistory)
             adapterForHistory.notifyDataSetChanged()
         }
 
