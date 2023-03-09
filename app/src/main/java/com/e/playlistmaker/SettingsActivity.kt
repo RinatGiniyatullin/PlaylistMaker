@@ -4,20 +4,23 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.Switch
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatDelegate
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val switchForTheme = findViewById<Switch>(R.id.switch_for_theme)
-        switchForTheme.setOnCheckedChangeListener { v, isChecked ->
-            AppCompatDelegate.setDefaultNightMode(if (isChecked) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO)
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.theme_switcher)
+
+        val sharedPrefs = getSharedPreferences(SETTING_PREFERENCES, MODE_PRIVATE)
+        themeSwitcher.setChecked(sharedPrefs.getBoolean(DARK_THEME_KEY, false))
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
+            sharedPrefs.edit().putBoolean(DARK_THEME_KEY,checked).apply()
         }
+
 
         val shareApp = findViewById<TextView>(R.id.share_app)
         shareApp.setOnClickListener {

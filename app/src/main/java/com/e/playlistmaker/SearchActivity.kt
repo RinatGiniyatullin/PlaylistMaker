@@ -1,11 +1,13 @@
 package com.e.playlistmaker
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -35,15 +37,22 @@ class SearchActivity : AppCompatActivity() {
     private val iTunesService = retrofit.create(ITunesApi::class.java)
     private val audio = ArrayList<ITunesAudio>()
     private val adapter = TrackAdapter()
+    private var audioHistory = ArrayList<ITunesAudio>()
+    private val adapterForHistory = TrackAdapter()
     private val notFound = "Ничего не нашлось"
     private val noConnection =
         "Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету"
-
+    private lateinit var historySearch: HistorySearch
+    private lateinit var sharedPrefHistory: SharedPreferences
+    private lateinit var inputText: EditText
+    private lateinit var recyclerView: RecyclerView
     private lateinit var errorImage: ImageView
     private lateinit var errorText: TextView
     private lateinit var updateButton: Button
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var inputText: EditText
+    private lateinit var containerForHistory: ViewGroup
+    private lateinit var containerForError: ViewGroup
+    private lateinit var recyclerHistory: RecyclerView
+    private lateinit var buttonHistory: Button
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -59,10 +68,20 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
+        sharedPrefHistory = getSharedPreferences(HISTORY_PREFERENCES, MODE_PRIVATE)
+        inputText = findViewById(R.id.editText)
+        val clearButton = findViewById<ImageView>(R.id.clearIcon)
+        val buttonBack = findViewById<TextView>(R.id.search_back)
+        recyclerView = findViewById(R.id.recyclerView)
         errorImage = findViewById(R.id.error_image)
         errorText = findViewById(R.id.error_text)
         updateButton = findViewById(R.id.update)
-        inputText = findViewById(R.id.editText)
+        containerForHistory = findViewById(R.id.containerForHistory)
+        containerForError = findViewById(R.id.containerForError)
+        recyclerHistory = findViewById(R.id.recyclerHistory)
+        buttonHistory = findViewById(R.id.buttonHistory)
+        historySearch = HistorySearch(sharedPrefHistory)
+
         inputText.setText(input)
         inputText.setOnEditorActionListener { textView, actionId, keyEvent ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -72,8 +91,19 @@ class SearchActivity : AppCompatActivity() {
             false
         }
 
-        val clearButton = findViewById<ImageView>(R.id.clearIcon)
+        // фокус на строку ввода
+        inputText.setOnFocusChangeListener { view, hasFocus ->
+            containerForHistory.visibility =
+                if (hasFocus && inputText.text.isEmpty() && historySearch.readFromJson()
+                        .isNotEmpty()
+                ) View.VISIBLE else View.GONE
+            containerForError.visibility =
+                if (hasFocus && inputText.text.isEmpty()) View.GONE else View.VISIBLE
+            recyclerView.visibility =
+                if (hasFocus && inputText.text.isEmpty()) View.GONE else View.VISIBLE
+        }
 
+        // нажатие на крестик
         clearButton.setOnClickListener {
             inputText.setText("")
             audio.clear()
@@ -86,16 +116,24 @@ class SearchActivity : AppCompatActivity() {
             inputMethodManager?.hideSoftInputFromWindow(inputText.windowToken, 0)
         }
 
-        val buttonBack = findViewById<TextView>(R.id.search_back)
+        // нажатие на кнопку назад
         buttonBack.setOnClickListener {
             finish()
         }
 
+        // ввод текста
         val textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.visibility = clearButtonVisibility(s)
+
+                containerForHistory.visibility =
+                    if (inputText.hasFocus() && s?.isEmpty() == true) View.VISIBLE else View.GONE
+                containerForError.visibility =
+                    if (inputText.hasFocus() && s?.isEmpty() == true) View.GONE else View.VISIBLE
+                recyclerView.visibility =
+                    if (inputText.hasFocus() && s?.isEmpty() == true) View.GONE else View.VISIBLE
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -105,10 +143,40 @@ class SearchActivity : AppCompatActivity() {
 
         inputText.addTextChangedListener(textWatcher)
 
-        recyclerView = findViewById(R.id.recyclerView)
+        // список треков
         adapter.audio = audio
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
+
+        // список истории
+        audioHistory.addAll(historySearch.readFromJson())
+        adapterForHistory.audio = audioHistory
+        recyclerHistory.layoutManager = LinearLayoutManager(this)
+        recyclerHistory.adapter = adapterForHistory
+        adapterForHistory.notifyDataSetChanged()
+
+        // нажатие на трек
+        adapter.itemClickListener = { track ->
+            if (audioHistory.contains(track)) {
+                audioHistory.remove(track)
+                audioHistory.add(0, track)
+            } else {
+                audioHistory.add(0, track)
+            }
+            if (audioHistory.size == 10) {
+                audioHistory.removeAt(9)
+            }
+            historySearch.writeToJson(audioHistory)
+            adapterForHistory.notifyDataSetChanged()
+        }
+
+
+        // Очистка истории
+        buttonHistory.setOnClickListener {
+            historySearch.clearHistory()
+            audioHistory.clear()
+            containerForHistory.visibility = View.GONE
+        }
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {

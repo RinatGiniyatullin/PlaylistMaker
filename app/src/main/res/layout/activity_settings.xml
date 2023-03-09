@@ -21,26 +21,20 @@
         android:textSize="@dimen/text_normal"
         app:drawableStartCompat="@drawable/arrow_back" />
 
-    <FrameLayout
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/theme_switcher"
+        style="@style/TextStyle"
         android:layout_width="match_parent"
-        android:layout_height="61dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginHorizontal="@dimen/padding_large"
         android:layout_marginTop="40dp"
-        android:paddingStart="@dimen/padding_large"
-        android:paddingEnd="@dimen/padding_large">
-
-        <TextView
-            style="@style/TextStyle"
-            android:text="@string/dark_theme" />
-
-        <Switch
-            android:id="@+id/switch_for_theme"
-            style="@style/ImageStyle" />
-
-    </FrameLayout>
+        android:height="@dimen/height_for_settings"
+        android:text="@string/dark_theme" />
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="61dp"
+        android:layout_height="@dimen/height_for_settings"
         android:paddingStart="@dimen/padding_large"
         android:paddingEnd="@dimen/padding_large">
 
@@ -57,7 +51,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="61dp"
+        android:layout_height="@dimen/height_for_settings"
         android:paddingStart="@dimen/padding_large"
         android:paddingEnd="@dimen/padding_large">
 
@@ -74,7 +68,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="61dp"
+        android:layout_height="@dimen/height_for_settings"
         android:paddingStart="@dimen/padding_large"
         android:paddingEnd="@dimen/padding_large">
 
