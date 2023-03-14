@@ -39,14 +39,12 @@ class AudioPlayer : AppCompatActivity() {
             findViewById<androidx.constraintlayout.widget.Group>(R.id.genreNameGroup)
         val countryGroup = findViewById<androidx.constraintlayout.widget.Group>(R.id.countryGroup)
 
-
-        val json = intent.getStringExtra(TRACK)
-        val track = Gson().fromJson(json, ITunesAudio::class.java)
+        val track = intent.getParcelableExtra<ITunesAudio>(TRACK)!!
 
         Glide.with(cover)
             .load(track.getCoverArtwork())
             .placeholder(R.drawable.cover_placeholder)
-            .transform(RoundedCorners(8))
+            .transform(RoundedCorners(resources.getDimensionPixelSize(R.dimen.margin_small)))
             .into(cover)
 
         trackName.text = track.trackName
@@ -86,7 +84,5 @@ class AudioPlayer : AppCompatActivity() {
         buttonBack.setOnClickListener {
             finish()
         }
-
-
     }
 }

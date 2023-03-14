@@ -171,16 +171,12 @@ class SearchActivity : AppCompatActivity() {
             historySearch.writeToJson(audioHistory)
             adapterForHistory.notifyDataSetChanged()
 
-            val libraryIntent = Intent(this,AudioPlayer::class.java)
-            libraryIntent.putExtra(TRACK, Gson().toJson(track))
-            startActivity(libraryIntent)
+            launchPlayer(track)
         }
 
         // нажатие на историю
-        adapterForHistory.itemClickListener = {track ->
-            val libraryIntent = Intent(this,AudioPlayer::class.java)
-            libraryIntent.putExtra(TRACK, Gson().toJson(track))
-            startActivity(libraryIntent)
+        adapterForHistory.itemClickListener = { track ->
+            launchPlayer(track)
         }
 
         // Очистка истории
@@ -258,5 +254,11 @@ class SearchActivity : AppCompatActivity() {
                     }
                 })
         }
+    }
+
+    private fun launchPlayer(track: ITunesAudio) {
+        val playerIntent = Intent(this, AudioPlayer::class.java)
+        playerIntent.putExtra(TRACK, track)
+        startActivity(playerIntent)
     }
 }
