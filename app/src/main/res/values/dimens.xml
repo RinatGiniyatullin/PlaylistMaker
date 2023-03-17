@@ -3,6 +3,7 @@
     <dimen name="big_size">50sp</dimen>
     <dimen name="text_normal">22sp</dimen>
     <dimen name="padding_large">16dp</dimen>
+    <dimen name="small_radius">2dp</dimen>
     <dimen name="text_small">16sp</dimen>
     <dimen name="margin_small">8dp</dimen>
     <dimen name="text_s_small">11sp</dimen>
@@ -16,4 +17,10 @@
     <dimen name="margin_l_normal">24dp</dimen>
     <dimen name="height_for_settings">61dp</dimen>
     <dimen name="button_radius">54dp</dimen>
+    <dimen name="big_barrier_player">24dp</dimen>
+    <dimen name="small_barrier_player">16dp</dimen>
+    <dimen name="button_size_player">51dp</dimen>
+    <dimen name="big_button_size_player">84dp</dimen>
+    <dimen name="description_text_player">13sp</dimen>
+    <dimen name="margin_top_description_player">17dp</dimen>
 </resources>

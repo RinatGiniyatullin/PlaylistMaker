@@ -1,6 +1,7 @@
 package com.e.playlistmaker
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,6 +17,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -168,8 +170,14 @@ class SearchActivity : AppCompatActivity() {
             }
             historySearch.writeToJson(audioHistory)
             adapterForHistory.notifyDataSetChanged()
+
+            launchPlayer(track)
         }
 
+        // нажатие на историю
+        adapterForHistory.itemClickListener = { track ->
+            launchPlayer(track)
+        }
 
         // Очистка истории
         buttonHistory.setOnClickListener {
@@ -246,5 +254,11 @@ class SearchActivity : AppCompatActivity() {
                     }
                 })
         }
+    }
+
+    private fun launchPlayer(track: ITunesAudio) {
+        val playerIntent = Intent(this, AudioPlayer::class.java)
+        playerIntent.putExtra(TRACK, track)
+        startActivity(playerIntent)
     }
 }

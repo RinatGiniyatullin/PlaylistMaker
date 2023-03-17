@@ -20,8 +20,8 @@ class TrackViewHolder(parentView: ViewGroup) : RecyclerView.ViewHolder(
 
     fun bind(model: ITunesAudio) {
         Glide.with(itemView)
-            .load(model.artworkUrl100)
-            .placeholder(R.drawable.close)
+            .load(model.getCoverArtwork())
+            .placeholder(R.drawable.cover_placeholder)
             .centerCrop()
             .transform(RoundedCorners(2))
             .into(trackCoverView)
