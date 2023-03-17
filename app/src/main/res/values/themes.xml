@@ -14,7 +14,6 @@
         <item name="colorContainer">@color/text_gray</item>
         <item name="colorAccent">@color/black25</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorSecondaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
 </resources>
