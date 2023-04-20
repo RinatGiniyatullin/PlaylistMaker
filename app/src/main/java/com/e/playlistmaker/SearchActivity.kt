@@ -5,19 +5,20 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,7 +28,13 @@ import retrofit2.converter.gson.GsonConverterFactory
 class SearchActivity : AppCompatActivity() {
     companion object {
         const val TEXT = "TEXT"
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
+
+    private var isClickAllowed = true
+    private val handler = Handler(Looper.getMainLooper())
+    private val searchRunnable = Runnable { search() }
 
     var input: String? = null
     private val iTunesBaseUrl = "https://itunes.apple.com"
@@ -53,8 +60,10 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var updateButton: Button
     private lateinit var containerForHistory: ViewGroup
     private lateinit var containerForError: ViewGroup
+    private lateinit var containerForProgressBar: ViewGroup
     private lateinit var recyclerHistory: RecyclerView
     private lateinit var buttonHistory: Button
+    private lateinit var progressBar: ProgressBar
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -80,18 +89,13 @@ class SearchActivity : AppCompatActivity() {
         updateButton = findViewById(R.id.update)
         containerForHistory = findViewById(R.id.containerForHistory)
         containerForError = findViewById(R.id.containerForError)
+        containerForProgressBar = findViewById(R.id.containerForProgressBar)
         recyclerHistory = findViewById(R.id.recyclerHistory)
         buttonHistory = findViewById(R.id.buttonHistory)
         historySearch = HistorySearch(sharedPrefHistory)
+        progressBar = findViewById(R.id.progressBar)
 
         inputText.setText(input)
-        inputText.setOnEditorActionListener { textView, actionId, keyEvent ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                search()
-                true
-            }
-            false
-        }
 
         // фокус на строку ввода
         inputText.setOnFocusChangeListener { view, hasFocus ->
@@ -128,6 +132,7 @@ class SearchActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                searchDebounce()
                 clearButton.visibility = clearButtonVisibility(s)
 
                 containerForHistory.visibility =
@@ -196,6 +201,9 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showMessage(text: String) {
+        recyclerView.visibility = View.GONE
+        containerForProgressBar.visibility = View.GONE
+        containerForError.visibility = View.VISIBLE
         when (text) {
             notFound -> {
                 errorImage.visibility = View.VISIBLE
@@ -208,6 +216,7 @@ class SearchActivity : AppCompatActivity() {
                 errorText.setText(text)
 
             }
+
             noConnection -> {
                 errorImage.visibility = View.VISIBLE
                 errorText.visibility = View.VISIBLE
@@ -219,6 +228,7 @@ class SearchActivity : AppCompatActivity() {
                 errorText.setText(text)
                 updateButton.setOnClickListener { search() }
             }
+
             else -> {
                 errorImage.visibility = View.GONE
                 errorText.visibility = View.GONE
@@ -229,12 +239,19 @@ class SearchActivity : AppCompatActivity() {
 
     private fun search() {
         if (inputText.text.isNotEmpty()) {
+
+            recyclerView.visibility = View.GONE
+            containerForHistory.visibility = View.GONE
+            containerForError.visibility = View.GONE
+            containerForProgressBar.visibility = View.VISIBLE
+
             iTunesService.search(inputText.text.toString())
                 .enqueue(object : Callback<ITunesResponse> {
                     override fun onResponse(
                         call: Call<ITunesResponse>,
                         response: Response<ITunesResponse>
                     ) {
+                        containerForProgressBar.visibility = View.GONE
                         if (response.code() == 200) {
                             recyclerView.visibility = View.VISIBLE
                             audio.clear()
@@ -257,8 +274,24 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun launchPlayer(track: ITunesAudio) {
-        val playerIntent = Intent(this, AudioPlayer::class.java)
-        playerIntent.putExtra(TRACK, track)
-        startActivity(playerIntent)
+        if (clickDebounce()) {
+            val playerIntent = Intent(this, AudioPlayer::class.java)
+            playerIntent.putExtra(TRACK, track)
+            startActivity(playerIntent)
+        }
+    }
+
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 }
