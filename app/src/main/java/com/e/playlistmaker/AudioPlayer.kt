@@ -15,100 +15,29 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class AudioPlayer : AppCompatActivity() {
-    companion object {
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
-        private const val DELAY = 300L
-    }
 
     private var playerState = STATE_DEFAULT
     private var mediaPlayer = MediaPlayer()
-    private var track: ITunesAudio? = null
+    private lateinit var track: ITunesAudio
+    private lateinit var buttonBack: TextView
+    private lateinit var cover: ImageView
+    private lateinit var trackName: TextView
+    private lateinit var artistName: TextView
+    private lateinit var addButton: ImageButton
     private lateinit var playButton: ImageButton
     private lateinit var progressTime: TextView
-    private var handler: Handler? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_audio_player)
-
-        val buttonBack = findViewById<TextView>(R.id.library_back)
-        val cover = findViewById<ImageView>(R.id.cover)
-        val trackName = findViewById<TextView>(R.id.trackName)
-        val artistName = findViewById<TextView>(R.id.artistName)
-        val addButton = findViewById<ImageButton>(R.id.addButton)
-        playButton = findViewById(R.id.playButton)
-        progressTime = findViewById(R.id.progressTime)
-        val likeButton = findViewById<ImageButton>(R.id.likeButton)
-        val trackTime = findViewById<TextView>(R.id.trackTimeValue)
-        val collectionName = findViewById<TextView>(R.id.collectionNameValue)
-        val releaseDate = findViewById<TextView>(R.id.releaseDateValue)
-        val genreName = findViewById<TextView>(R.id.genreNameValue)
-        val country = findViewById<TextView>(R.id.countryValue)
-        val trackTimeGroup =
-            findViewById<androidx.constraintlayout.widget.Group>(R.id.trackTimeGroup)
-        val collectionNameGroup =
-            findViewById<androidx.constraintlayout.widget.Group>(R.id.collectionNameGroup)
-        val releaseDateGroup =
-            findViewById<androidx.constraintlayout.widget.Group>(R.id.releaseDateGroup)
-        val genreNameGroup =
-            findViewById<androidx.constraintlayout.widget.Group>(R.id.genreNameGroup)
-        val countryGroup = findViewById<androidx.constraintlayout.widget.Group>(R.id.countryGroup)
-
-        handler = Handler(Looper.getMainLooper())
-        track = intent.getParcelableExtra(TRACK)!!
-
-        Glide.with(cover)
-            .load(track?.getCoverArtwork())
-            .placeholder(R.drawable.cover_placeholder)
-            .transform(RoundedCorners(resources.getDimensionPixelSize(R.dimen.margin_small)))
-            .into(cover)
-
-        trackName.text = track?.trackName
-        artistName.text = track?.artistName
-
-        if (track?.trackTimeMillis != 0L) {
-            trackTime.text =
-                SimpleDateFormat("mm:ss", Locale.getDefault()).format(track?.trackTimeMillis)
-        } else {
-            trackTimeGroup.visibility = View.GONE
-        }
-
-        if (track?.collectionName!!.isNotEmpty()) {
-            collectionName.text = track?.collectionName
-        } else {
-            collectionNameGroup.visibility = View.GONE
-        }
-
-        if (track?.releaseDate!!.isNotEmpty()) {
-            releaseDate.text = track?.getReleaseDateOnlyYear()
-        } else {
-            releaseDateGroup.visibility = View.GONE
-        }
-
-        if (track?.primaryGenreName!!.isNotEmpty()) {
-            genreName.text = track?.primaryGenreName
-        } else {
-            genreNameGroup.visibility = View.GONE
-        }
-
-        if (track?.country!!.isNotEmpty()) {
-            country.text = track?.country
-        } else {
-            countryGroup.visibility = View.GONE
-        }
-
-        buttonBack.setOnClickListener {
-            finish()
-        }
-
-        preparePlayer()
-        playButton.setOnClickListener {
-            playbackControl()
-        }
-    }
+    private lateinit var likeButton: ImageButton
+    private lateinit var trackTime: TextView
+    private lateinit var collectionName: TextView
+    private lateinit var releaseDate: TextView
+    private lateinit var genreName: TextView
+    private lateinit var country: TextView
+    private lateinit var trackTimeGroup: androidx.constraintlayout.widget.Group
+    private lateinit var collectionNameGroup: androidx.constraintlayout.widget.Group
+    private lateinit var releaseDateGroup: androidx.constraintlayout.widget.Group
+    private lateinit var genreNameGroup: androidx.constraintlayout.widget.Group
+    private lateinit var countryGroup: androidx.constraintlayout.widget.Group
+    private lateinit var handler: Handler
 
     private val run = object : Runnable {
         override fun run() {
@@ -118,7 +47,42 @@ class AudioPlayer : AppCompatActivity() {
                         "mm:ss",
                         Locale.getDefault()
                     ).format(mediaPlayer.currentPosition)
-            handler?.postDelayed(this, DELAY)
+            handler.postDelayed(this, DELAY)
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_audio_player)
+
+        viewInitialization()
+
+        handler = Handler(Looper.getMainLooper())
+        track = intent.getParcelableExtra(TRACK)!!
+
+        Glide.with(cover)
+            .load(track.getCoverArtwork())
+            .placeholder(R.drawable.cover_placeholder)
+            .transform(RoundedCorners(resources.getDimensionPixelSize(R.dimen.margin_small)))
+            .into(cover)
+
+        trackName.text = track.trackName
+        artistName.text = track.artistName
+
+        visiblyTrackTimeGroup()
+        visiblyCollectionNameGroup()
+        visiblyReleaseDateGroup()
+        visiblyGenreNameGroup()
+        visiblyCountryGroup()
+
+        buttonBack.setOnClickListener {
+            finish()
+        }
+
+        preparePlayer()
+
+        playButton.setOnClickListener {
+            playbackControl()
         }
     }
 
@@ -130,11 +94,73 @@ class AudioPlayer : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mediaPlayer.release()
-        handler?.removeCallbacks(run)
+        handler.removeCallbacks(run)
+    }
+
+    private fun viewInitialization() {
+        buttonBack = findViewById(R.id.library_back)
+        cover = findViewById(R.id.cover)
+        trackName = findViewById(R.id.trackName)
+        artistName = findViewById(R.id.artistName)
+        addButton = findViewById(R.id.addButton)
+        playButton = findViewById(R.id.playButton)
+        progressTime = findViewById(R.id.progressTime)
+        likeButton = findViewById(R.id.likeButton)
+        trackTime = findViewById(R.id.trackTimeValue)
+        collectionName = findViewById(R.id.collectionNameValue)
+        releaseDate = findViewById(R.id.releaseDateValue)
+        genreName = findViewById(R.id.genreNameValue)
+        country = findViewById(R.id.countryValue)
+        trackTimeGroup = findViewById(R.id.trackTimeGroup)
+        collectionNameGroup = findViewById(R.id.collectionNameGroup)
+        releaseDateGroup = findViewById(R.id.releaseDateGroup)
+        genreNameGroup = findViewById(R.id.genreNameGroup)
+        countryGroup = findViewById(R.id.countryGroup)
+    }
+
+    private fun visiblyTrackTimeGroup() {
+        if (track.trackTimeMillis != 0L) {
+            trackTime.text =
+                SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
+        } else {
+            trackTimeGroup.visibility = View.GONE
+        }
+    }
+
+    private fun visiblyCollectionNameGroup() {
+        if (track.collectionName.isNotEmpty()) {
+            collectionName.text = track.collectionName
+        } else {
+            collectionNameGroup.visibility = View.GONE
+        }
+    }
+
+    private fun visiblyReleaseDateGroup() {
+        if (track.releaseDate.isNotEmpty()) {
+            releaseDate.text = track.getReleaseDateOnlyYear()
+        } else {
+            releaseDateGroup.visibility = View.GONE
+        }
+    }
+
+    private fun visiblyGenreNameGroup() {
+        if (track.primaryGenreName.isNotEmpty()) {
+            genreName.text = track.primaryGenreName
+        } else {
+            genreNameGroup.visibility = View.GONE
+        }
+    }
+
+    private fun visiblyCountryGroup() {
+        if (track.country.isNotEmpty()) {
+            country.text = track.country
+        } else {
+            countryGroup.visibility = View.GONE
+        }
     }
 
     private fun preparePlayer() {
-        mediaPlayer.setDataSource(track?.previewUrl)
+        mediaPlayer.setDataSource(track.previewUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
             playButton.isEnabled = true
@@ -143,8 +169,8 @@ class AudioPlayer : AppCompatActivity() {
         mediaPlayer.setOnCompletionListener {
             playButton.setImageResource(R.drawable.play)
             playerState = STATE_PREPARED
-            handler?.removeCallbacks(run)
-            progressTime.text = "00:00"
+            handler.removeCallbacks(run)
+            progressTime.text = DEFAULT_MM_SS
         }
     }
 
@@ -152,14 +178,14 @@ class AudioPlayer : AppCompatActivity() {
         mediaPlayer.start()
         playButton.setImageResource(R.drawable.pause)
         playerState = STATE_PLAYING
-        handler?.post(run)
+        handler.post(run)
     }
 
     private fun pausePlayer() {
         mediaPlayer.pause()
         playButton.setImageResource(R.drawable.play)
         playerState = STATE_PAUSED
-        handler?.removeCallbacks(run)
+        handler.removeCallbacks(run)
     }
 
     private fun playbackControl() {
@@ -167,5 +193,14 @@ class AudioPlayer : AppCompatActivity() {
             STATE_PLAYING -> pausePlayer()
             STATE_PREPARED, STATE_PAUSED -> startPlayer()
         }
+    }
+
+    companion object {
+        private const val STATE_DEFAULT = 0
+        private const val STATE_PREPARED = 1
+        private const val STATE_PLAYING = 2
+        private const val STATE_PAUSED = 3
+        private const val DELAY = 300L
+        private const val DEFAULT_MM_SS = "00:00"
     }
 }
