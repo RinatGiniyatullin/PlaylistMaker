@@ -1,12 +1,13 @@
-package com.e.playlistmaker
+package com.e.playlistmaker.search.presentation
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.e.playlistmaker.search.domain.Track
 
 class TrackAdapter : RecyclerView.Adapter<TrackViewHolder>() {
 
-    var itemClickListener: ((ITunesAudio) -> Unit)? = null
-    var audio = ArrayList<ITunesAudio>()
+    var itemClickListener: ((Track) -> Unit)? = null
+    var audio = mutableListOf<Track>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         return TrackViewHolder(parent)
     }

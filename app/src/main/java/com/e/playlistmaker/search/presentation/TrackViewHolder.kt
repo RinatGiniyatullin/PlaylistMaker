@@ -1,4 +1,4 @@
-package com.e.playlistmaker
+package com.e.playlistmaker.search.presentation
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,6 +7,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.e.playlistmaker.R
+import com.e.playlistmaker.search.domain.Track
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -18,7 +20,7 @@ class TrackViewHolder(parentView: ViewGroup) : RecyclerView.ViewHolder(
     private val artistNameView = itemView.findViewById<TextView>(R.id.artistName)
     private val trackTimeView = itemView.findViewById<TextView>(R.id.trackTime)
 
-    fun bind(model: ITunesAudio) {
+    fun bind(model: Track) {
         Glide.with(itemView)
             .load(model.getCoverArtwork())
             .placeholder(R.drawable.cover_placeholder)
