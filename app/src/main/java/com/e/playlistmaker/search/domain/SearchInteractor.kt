@@ -1,11 +1,9 @@
 package com.e.playlistmaker.search.domain
 
-import com.e.playlistmaker.search.data.HistorySearchDataStore
-import com.e.playlistmaker.search.data.SearchRepository
 
 class SearchInteractor(
-    private val historySearchDataStore: HistorySearchDataStore,
-    private val repository: SearchRepository,
+    private val historySearchDataStore: IHistorySearchDataStore,
+    private val repository: ISearchRepository,
 ) : ISearchInteractor{
    override fun clearHistory() {
         historySearchDataStore.clearHistory()

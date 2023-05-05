@@ -23,9 +23,7 @@ class SearchRepository(private val api: ITunesApi) : ISearchRepository {
                     }
                 }
 
-                override fun onFailure(call: Call<ITunesResponse>, t: Throwable) {
-                    onError
-                }
+                override fun onFailure(call: Call<ITunesResponse>, t: Throwable) {}
             })
     }
 

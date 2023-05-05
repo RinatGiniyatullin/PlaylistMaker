@@ -1,44 +1,71 @@
 package com.e.playlistmaker.player.presentation
 
+import android.media.MediaPlayer
+import android.os.Looper
+import android.os.Handler
 import com.e.playlistmaker.R
+import com.e.playlistmaker.player.domain.IPlayerInteractor
+import com.e.playlistmaker.search.domain.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class AudioPlayerPresenter(
     private val view: PlayerScreenView,
     private val interactor: IPlayerInteractor,
-    private val router: AudioPlayerRouter,
 ) {
+    private val mediaPlayer = MediaPlayer()
+    private var playerState = PlayerState.STATE_DEFAULT
+    private val handler = Handler(Looper.getMainLooper())
+    private val run = object : Runnable {
+        override fun run() {
+            if (playerState == PlayerState.STATE_PLAYING)
+                view.setProgressTimeText(
+                    SimpleDateFormat(
+                        PROGRESS_FORMAT,
+                        Locale.getDefault()
+                    ).format(mediaPlayer.currentPosition)
+                )
+            handler.postDelayed(this, DELAY)
+        }
+    }
 
     fun backButtonClicked() {
-        router.goBack()
+        view.goBack()
     }
 
     fun playButtonClicked() {
-        interactor.playButtonClicked()
-        when (playerState) {
-            AudioPlayerActivity.STATE_PLAYING -> pausePlayer()
-            AudioPlayerActivity.STATE_PREPARED, AudioPlayerActivity.STATE_PAUSED -> startPlayer()
-        }
+        if (playerState == PlayerState.STATE_PLAYING) pausePlayer()
+        if (playerState == PlayerState.STATE_PREPARED || playerState == PlayerState.STATE_PAUSED) startPlayer()
+    }
+
+    private fun startPlayer() {
+        mediaPlayer.start()
+        view.setImageButton(R.drawable.pause)
+        playerState = PlayerState.STATE_PLAYING
+        handler.post(run)
+    }
+
+    private fun pausePlayer() {
+        mediaPlayer.pause()
+        view.setImageButton(R.drawable.play)
+        playerState = PlayerState.STATE_PAUSED
+        handler.removeCallbacks(run)
     }
 
     fun loadTrack(trackId: String) {
         val track = interactor.loadTrack(trackId)!!
         view.showTrackCover(track.getCoverArtwork())
-    }
-
-    fun showTrackName(trackId: String) {
-        val track = interactor.loadTrack(trackId)!!
         view.showTrackName(track.trackName)
-    }
-
-    fun showArtistName(trackId: String) {
-        val track = interactor.loadTrack(trackId)!!
         view.showArtistName(track.artistName)
+        setVisibilityTrackTimeGroup(track)
+        setVisibilityCollectionNameGroup(track)
+        setVisibilityReleaseDateGroup(track)
+        setVisibilityGenreNameGroup(track)
+        setVisibilityCountryGroup(track)
+        preparePlayer(track)
     }
 
-    fun setVisibilityTrackTimeGroup(trackId: String) {
-        val track = interactor.loadTrack(trackId)!!
+    fun setVisibilityTrackTimeGroup(track: Track) {
         if (track.trackTimeMillis != 0L) {
             view.showTrackTimeText(
                 SimpleDateFormat(PROGRESS_FORMAT, Locale.getDefault()).format(
@@ -46,62 +73,64 @@ class AudioPlayerPresenter(
                 )
             )
         } else {
-            view.hideTrackTimeGroup()
+            view.goneTrackTimeGroup()
         }
     }
 
-    fun setVisibilityCollectionNameGroup(trackId: String) {
-        val track = interactor.loadTrack(trackId)!!
+    fun setVisibilityCollectionNameGroup(track: Track) {
         if (track.collectionName.isNotEmpty()) {
             view.showCollectionNameText(track.collectionName)
         } else {
-            view.hideCollectionNameGroup()
+            view.goneCollectionNameGroup()
         }
     }
 
-    fun setVisibilityReleaseDateGroup(trackId: String) {
-        val track = interactor.loadTrack(trackId)!!
+    fun setVisibilityReleaseDateGroup(track: Track) {
         if (track.releaseDate.isNotEmpty()) {
             view.showReleaseDateText(track.getReleaseDateOnlyYear())
         } else {
-            view.hideReleaseDateGroup()
+            view.goneReleaseDateGroup()
         }
     }
 
-    fun setVisibilityGenreNameGroup(trackId: String) {
-        val track = interactor.loadTrack(trackId)!!
+    fun setVisibilityGenreNameGroup(track: Track) {
         if (track.primaryGenreName.isNotEmpty()) {
             view.showGenreNameText(track.primaryGenreName)
         } else {
-            view.hideGenreNameGroup()
+            view.goneGenreNameGroup()
         }
     }
 
-    fun setVisibilityCountryGroup(trackId: String) {
-        val track = interactor.loadTrack(trackId)!!
+    fun setVisibilityCountryGroup(track: Track) {
         if (track.country.isNotEmpty()) {
             view.showCountryText(track.country)
         } else {
-            view.hideCountryTextGroup()
+            view.goneCountryTextGroup()
         }
     }
 
-    fun preparePlayer(trackId: String) {
-        val track = interactor.loadTrack(trackId)!!
-        interactor.preparePlayer(track.previewUrl)
+    fun preparePlayer(track: Track) {
+        mediaPlayer.setDataSource(track.previewUrl)
+        mediaPlayer.prepareAsync()
+        mediaPlayer.setOnPreparedListener {
+            view.setEnableButton(true)
+            playerState = PlayerState.STATE_PREPARED
+        }
+        mediaPlayer.setOnCompletionListener {
+            view.setImageButton(R.drawable.play)
+            playerState = PlayerState.STATE_PREPARED
+            handler.removeCallbacks(run)
+            view.setProgressTimeText(DEFAULT_MM_SS)
+        }
+    }
 
-//        mediaPlayer.setDataSource(track.previewUrl)
-//        mediaPlayer.prepareAsync()
-//        mediaPlayer.setOnPreparedListener {
-//            playButton.isEnabled = true
-//            playerState = STATE_PREPARED
-//        }
-//        mediaPlayer.setOnCompletionListener {
-//            playButton.setImageResource(R.drawable.play)
-//            playerState = STATE_PREPARED
-//            handler.removeCallbacks(run)
-//            progressTime.text = AudioPlayerActivity.DEFAULT_MM_SS
-//        }
+    fun playerPaused() {
+        pausePlayer()
+    }
+
+    fun playerOnDestroyed() {
+        mediaPlayer.release()
+        handler.removeCallbacks(run)
     }
 
     companion object {

@@ -2,14 +2,15 @@ package com.e.playlistmaker.search.data
 
 import android.content.SharedPreferences
 import com.e.playlistmaker.search.domain.Track
-import com.e.playlistmaker.TRACK_KEY
 import com.e.playlistmaker.search.domain.IHistorySearchDataStore
 import com.google.gson.Gson
 
-class HistorySearchDataStore(private val sharedPreferences: SharedPreferences): IHistorySearchDataStore {
+class HistorySearchDataStore(private val sharedPreferences: SharedPreferences) :
+    IHistorySearchDataStore {
+    private val TRACK_KEY = "Track_key"
 
     // Очистка истории
-   override fun clearHistory() {
+    override fun clearHistory() {
         sharedPreferences.edit().remove(TRACK_KEY).apply()
     }
 

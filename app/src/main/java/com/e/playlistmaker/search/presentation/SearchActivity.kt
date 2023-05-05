@@ -33,8 +33,6 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
     private val searchRunnable = Runnable { loadTracks() }
-
-    //    var input: String? = null
     private val iTunesBaseUrl = "https://itunes.apple.com"
     private val retrofit = Retrofit.Builder()
         .baseUrl(iTunesBaseUrl)
@@ -43,7 +41,6 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
 
     private val repository = SearchRepository(retrofit.create(ITunesApi::class.java))
 
-    //  private val tracks = ArrayList<Track>()
     private val adapter = TrackAdapter()
     private val adapterForHistory = TrackAdapter()
     private lateinit var historySearchDataStore: HistorySearchDataStore
@@ -63,16 +60,6 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
     private lateinit var progressBar: ProgressBar
     private lateinit var presenter: SearchPresenter
 
-/*//    override fun onSaveInstanceState(outState: Bundle) {
-//        super.onSaveInstanceState(outState)
-//      //  outState.putString(TEXT, input)
-//    }
-//
-//    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-//        super.onRestoreInstanceState(savedInstanceState)
-//        input = savedInstanceState.getString(TEXT)
-//    }*/
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -85,13 +72,9 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
         presenter =
             SearchPresenter(
                 view = this,
-                interactor = SearchInteractor(historySearchDataStore,repository),
-//                historySearch = historySearch,
-//                repository = repository,
+                interactor = SearchInteractor(historySearchDataStore, repository),
                 router = SearchRouter(this)
             )
-
-        //    inputText.setText(input)
 
         // фокус на строку ввода
         inputText.setOnFocusChangeListener { _, hasFocus ->
@@ -115,26 +98,20 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchDebounce()
                 clearButton.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
-
-
                 containerForHistory.visibility =
                     if (inputText.hasFocus() && s?.isEmpty() == true) View.VISIBLE else View.GONE
                 containerForError.visibility =
                     if (inputText.hasFocus() && s?.isEmpty() == true) View.GONE else View.VISIBLE
                 recyclerView.visibility =
                     if (inputText.hasFocus() && s?.isEmpty() == true) View.GONE else View.VISIBLE
-
             }
 
-            override fun afterTextChanged(s: Editable?) {
-                //              input = s.toString()
-            }
+            override fun afterTextChanged(s: Editable?) {}
         })
 
         // нажатие на трек
         adapter.itemClickListener =
             { track ->
-                //          launchPlayer(track)
                 if (clickDebounce()) {
                     presenter.onTrackClicked(track)
                 }
@@ -143,10 +120,8 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
         // нажатие на историю
         adapterForHistory.itemClickListener =
             { track ->
-                //        launchPlayer(track)
-
                 if (clickDebounce()) {
-                    presenter.onHistoryTrackClicked(track)
+                   presenter.onHistoryTrackClicked(track)
                 }
             }
 
@@ -155,31 +130,6 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
             presenter.onHistoryClearClicked()
         }
     }
-
-   /* override fun addTrack(track: Track) {
-        if (historyTracks.contains(track)) {
-            historyTracks.remove(track)
-            historyTracks.add(0, track)
-        } else {
-            historyTracks.add(0, track)
-        }
-        if (historyTracks.size == 10) {
-            historyTracks.removeAt(9)
-        }
-        historySearch.writeHistory(historyTracks)
-        adapterForHistory.notifyDataSetChanged()
-    }*/
-
-/*
-//    override fun refreshHistory(historyTracks: Array<Track>) {
-//        adapterForHistory.audio.clear()
-//        adapterForHistory.audio.addAll(historyTracks)
-//        if (historyTracks.isEmpty()) {
-//            containerForHistory.visibility = View.GONE
-//        }
-//        adapterForHistory.notifyDataSetChanged()
-//    }
-*/
 
     override fun showHistory(historyTracks: List<Track>) {
         containerForHistory.visibility = View.VISIBLE
@@ -192,18 +142,11 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
 
         adapterForHistory.audio.clear()
         adapterForHistory.audio.addAll(historyTracks)
+        adapterForHistory.notifyDataSetChanged()
         if (historyTracks.isEmpty()) {
             containerForHistory.visibility = View.GONE
         }
-        adapterForHistory.notifyDataSetChanged()
     }
-
-/*//    override fun hideHistory() {
-//        containerForHistory.visibility = View.GONE
-//        containerForError.visibility = View.VISIBLE
-//        recyclerView.visibility = View.VISIBLE
-//        containerForProgressBar.visibility = View.GONE
-//    }*/
 
     override fun clearSearchText() {
         inputText.setText("")
@@ -215,14 +158,6 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
         inputMethodManager?.hideSoftInputFromWindow(inputText.windowToken, 0)
     }
 
-/*//    override fun hideTracks() {
-//        adapter.audio.clear()
-//        adapter.notifyDataSetChanged()
-//        errorImage.visibility = View.GONE
-//        errorText.visibility = View.GONE
-//        updateButton.visibility = View.GONE
-//    }*/
-
     override fun showEmptyResult() {
         recyclerView.visibility = View.GONE
         containerForHistory.visibility = View.GONE
@@ -231,9 +166,6 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
         errorImage.visibility = View.VISIBLE
         errorText.visibility = View.VISIBLE
         updateButton.visibility = View.GONE
-        /*//     tracks.clear()
-        //     adapter.notifyDataSetChanged()
-        // recyclerView.visibility = View.GONE*/
         errorImage.setImageResource(R.drawable.not_found)
         errorText.text = NOT_FOUND
     }
@@ -243,9 +175,6 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
         containerForProgressBar.visibility = View.GONE
         containerForError.visibility = View.GONE
         containerForHistory.visibility = View.GONE
-
-/*//        adapterForHistory.audio.clear()
-//        adapterForHistory.notifyDataSetChanged()*/
 
         adapter.audio.clear()
         adapter.audio.addAll(tracks)
@@ -260,9 +189,7 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
         errorImage.visibility = View.VISIBLE
         errorText.visibility = View.VISIBLE
         updateButton.visibility = View.VISIBLE
-       /* //        tracks.clear()
-        //       adapter.notifyDataSetChanged()
-        //  recyclerView.visibility = View.GONE*/
+
         errorImage.setImageResource(R.drawable.no_connection)
         errorText.text = NO_CONNECTION
         updateButton.setOnClickListener { loadTracks() }
@@ -305,8 +232,6 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
     }
 
     private fun initAdapter() {
-        //  adapter.audio = tracks
-        // todo:
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
     }
@@ -316,41 +241,6 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
         recyclerHistory.adapter = adapterForHistory
     }
 
-/*//    private fun showMessage(text: String) {
-//        recyclerView.visibility = View.GONE
-//        containerForProgressBar.visibility = View.GONE
-//        containerForError.visibility = View.VISIBLE
-//        when (text) {
-//            NOT_FOUND -> {
-//           }
-//
-//            NO_CONNECTION -> {
-//            }
-//
-//            else -> {
-//                recyclerView.visibility = View.GONE
-//                containerForProgressBar.visibility = View.GONE
-//                containerForError.visibility = View.VISIBLE
-//                errorImage.visibility = View.GONE
-//                errorText.visibility = View.GONE
-//                updateButton.visibility = View.GONE
-//            }
-//        }
-//    }
-
-//    private fun launchPlayer(track: Track) {
-//        if (clickDebounce()) {
-//            presenter.onHistoryTrackClicked(track)
-//
-//            startAudioPlayerActivity(track)
-//        }
-//    }
-
-//    private fun startAudioPlayerActivity(track: Track) {
-//        val playerIntent = Intent(this, AudioPlayer::class.java)
-//        playerIntent.putExtra(TRACK, track)
-//        startActivity(playerIntent)
-//    }*/
 
     private fun clickDebounce(): Boolean {
         val current = isClickAllowed
@@ -367,7 +257,6 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
     }
 
     companion object {
-        //       const val TEXT = "TEXT"
         const val NOT_FOUND = "Ничего не нашлось"
         const val NO_CONNECTION =
             "Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету"

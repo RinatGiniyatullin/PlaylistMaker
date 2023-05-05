@@ -11,8 +11,4 @@ interface SearchScreenView {
     fun showTracks(tracks: List<Track>)
     fun showTracksError()
     fun showLoading()
- //   fun addTrack(track: Track)
-//  fun hideHistory()
-    //  fun hideTracks()
-
 }

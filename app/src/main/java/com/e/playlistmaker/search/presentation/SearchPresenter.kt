@@ -6,8 +6,6 @@ import com.e.playlistmaker.search.domain.Track
 class SearchPresenter(
     private val view: SearchScreenView,
     private val interactor: ISearchInteractor,
-//    private val historySearch: HistorySearch,
-//    private val repository: SearchRepository,
     private val router: SearchRouter,
 ) {
 
@@ -35,7 +33,6 @@ class SearchPresenter(
     fun searchTextClearClicked() {
         view.clearSearchText()
         view.hideKeyboard()
-        //       view.hideTracks()
         view.showHistory(interactor.getHistory())
     }
 
