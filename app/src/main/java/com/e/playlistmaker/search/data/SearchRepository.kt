@@ -2,13 +2,16 @@ package com.e.playlistmaker.search.data
 
 import com.e.playlistmaker.search.domain.Track
 import com.e.playlistmaker.search.domain.ISearchRepository
+import com.e.playlistmaker.search.domain.TracksLoadResultListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class SearchRepository(private val api: ITunesApi) : ISearchRepository {
 
-    override fun loadTracks(query: String, onSuccess: (List<Track>) -> Unit, onError: () -> Unit) {
+    override var tracksLoadResultListener: TracksLoadResultListener? = null
+
+    override fun loadTracks(query: String) {
 
         api.search(query)
             .enqueue(object : Callback<ITunesResponse> {
@@ -17,13 +20,23 @@ class SearchRepository(private val api: ITunesApi) : ISearchRepository {
                     response: Response<ITunesResponse>,
                 ) {
                     if (response.code() == 200) {
-                        onSuccess.invoke(response.body()?.results!!.map { mapTrack(it) })
-                    } else {
-                        onError.invoke()
+                        //        onSuccess.invoke(response.body()?.results!!.map { mapTrack(it) })
+
+                        val tracks =
+                            response.body()?.results!!.map { mapTrack(it) }.filter { track ->
+                                track.previewUrl != null
+                            }
+                        tracksLoadResultListener?.onSuccess(tracks = tracks)
+
                     }
+                    //else {
+                    //  onError.invoke()
+                    //}
                 }
 
-                override fun onFailure(call: Call<ITunesResponse>, t: Throwable) {}
+                override fun onFailure(call: Call<ITunesResponse>, t: Throwable) {
+                    tracksLoadResultListener?.onError()
+                }
             })
     }
 

@@ -2,18 +2,33 @@ package com.e.playlistmaker.search.presentation
 
 import com.e.playlistmaker.search.domain.ISearchInteractor
 import com.e.playlistmaker.search.domain.Track
+import com.e.playlistmaker.search.domain.TracksLoadResultListener
 
 class SearchPresenter(
     private val view: SearchScreenView,
     private val interactor: ISearchInteractor,
-    private val router: SearchRouter,
+    private val router: Router,
 ) {
 
     private val cachedTracks = mutableListOf<Track>()
     private val historyTracks = mutableListOf<Track>()
 
     init {
-        view.showHistory(historyTracks)
+        interactor.subscribeOnTracksLoadResult(object : TracksLoadResultListener {
+            override fun onSuccess(tracks: List<Track>) {
+                if (tracks.isEmpty()) {
+                    view.showEmptyResult()
+                } else {
+                    view.showTracks(tracks)
+                }
+            }
+
+            override fun onError() {
+                view.showTracksError()
+            }
+        })
+
+        historyTracks.addAll(interactor.getHistory())
     }
 
     fun onHistoryClearClicked() {
@@ -41,18 +56,9 @@ class SearchPresenter(
             return
         }
         view.showLoading()
-        interactor.loadTracks(query = query,
-            onSuccess = { tracks ->
-                cachedTracks.clear()
-                cachedTracks.addAll(tracks)
-                if (tracks.isEmpty()) {
-                    view.showEmptyResult()
-                } else {
-                    view.showTracks(tracks)
-                }
-            }, onError = {
-                view.showTracksError()
-            })
+        interactor.loadTracks(
+            query = query
+        )
     }
 
     fun backButtonClicked() {
@@ -66,16 +72,22 @@ class SearchPresenter(
         } else {
             historyTracks.add(0, track)
         }
-        if (historyTracks.size == 10) {
-            historyTracks.removeAt(9)
+        if (historyTracks.size == 11) {
+            historyTracks.removeAt(10)
         }
         interactor.writeHistory(historyTracks)
-
-        view.showHistory(historyTracks)
         router.openTrack(track.trackId)
     }
 
     fun onHistoryTrackClicked(track: Track) {
+        historyTracks.remove(track)
+        historyTracks.add(0, track)
+        interactor.writeHistory(historyTracks)
+        view.updateHistoryTracks(historyTracks)
         router.openTrack(track.trackId)
+    }
+
+    fun onDestroyView() {
+        interactor.unsubscribeFromTracksLoadResult()
     }
 }

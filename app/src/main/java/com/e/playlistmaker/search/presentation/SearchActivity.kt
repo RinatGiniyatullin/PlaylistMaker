@@ -32,15 +32,6 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
 
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
-    private val searchRunnable = Runnable { loadTracks() }
-    private val iTunesBaseUrl = "https://itunes.apple.com"
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(iTunesBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val repository = SearchRepository(retrofit.create(ITunesApi::class.java))
-
     private val adapter = TrackAdapter()
     private val adapterForHistory = TrackAdapter()
     private lateinit var historySearchDataStore: HistorySearchDataStore
@@ -68,12 +59,20 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
         initView()
         initAdapter()
         initAdapterHistory()
+        val iTunesBaseUrl = "https://itunes.apple.com"
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl(iTunesBaseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val repository = SearchRepository(retrofit.create(ITunesApi::class.java))
 
         presenter =
             SearchPresenter(
                 view = this,
                 interactor = SearchInteractor(historySearchDataStore, repository),
-                router = SearchRouter(this)
+                router = Router(this)
             )
 
         // фокус на строку ввода
@@ -121,7 +120,7 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
         adapterForHistory.itemClickListener =
             { track ->
                 if (clickDebounce()) {
-                   presenter.onHistoryTrackClicked(track)
+                    presenter.onHistoryTrackClicked(track)
                 }
             }
 
@@ -131,14 +130,15 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.onDestroyView()
+    }
     override fun showHistory(historyTracks: List<Track>) {
         containerForHistory.visibility = View.VISIBLE
         containerForError.visibility = View.GONE
         recyclerView.visibility = View.GONE
         containerForProgressBar.visibility = View.GONE
-
-        adapter.audio.clear()
-        adapter.notifyDataSetChanged()
 
         adapterForHistory.audio.clear()
         adapterForHistory.audio.addAll(historyTracks)
@@ -205,6 +205,12 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
         containerForProgressBar.visibility = View.VISIBLE
     }
 
+    override fun updateHistoryTracks(historyTracks: MutableList<Track>) {
+        adapterForHistory.audio.clear()
+        adapterForHistory.audio.addAll(historyTracks)
+        adapterForHistory.notifyDataSetChanged()
+    }
+
     private fun loadTracks() {
         presenter.loadTracks(inputText.text.toString())
     }
@@ -252,6 +258,7 @@ class SearchActivity : AppCompatActivity(), SearchScreenView {
     }
 
     private fun searchDebounce() {
+        val searchRunnable = Runnable { loadTracks() }
         handler.removeCallbacks(searchRunnable)
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }

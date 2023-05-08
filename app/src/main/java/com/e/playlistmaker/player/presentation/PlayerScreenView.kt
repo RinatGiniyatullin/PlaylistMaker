@@ -17,5 +17,5 @@ interface PlayerScreenView {
     fun goneCountryTextGroup()
     fun setEnableButton(b: Boolean)
     fun setImageButton(image: Int)
-    fun setProgressTimeText(text: String)
+    fun updadeProgressTime(currentTime: Int)
 }

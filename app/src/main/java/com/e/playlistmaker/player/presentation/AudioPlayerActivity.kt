@@ -11,8 +11,11 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.e.playlistmaker.HISTORY_PREFERENCES
 import com.e.playlistmaker.R
 import com.e.playlistmaker.TRACK
+import com.e.playlistmaker.player.data.Player
 import com.e.playlistmaker.player.domain.PlayerInteractor
 import com.e.playlistmaker.search.data.HistorySearchDataStore
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class AudioPlayerActivity : AppCompatActivity(), PlayerScreenView {
 
@@ -43,13 +46,15 @@ class AudioPlayerActivity : AppCompatActivity(), PlayerScreenView {
         viewInitialization()
         val sharedPrefHistory = getSharedPreferences(HISTORY_PREFERENCES, MODE_PRIVATE)
         val historySearchDataStore = HistorySearchDataStore(sharedPrefHistory)
+        val trackId = intent.getStringExtra(TRACK)!!
+        val previewUrl = presenter.getPreviewUrl(trackId)
+        val player = Player(previewUrl)
 
         presenter = AudioPlayerPresenter(
             view = this,
-            interactor = PlayerInteractor(historySearchDataStore),
+            interactor = PlayerInteractor(historySearchDataStore, player)
         )
 
-        val trackId = intent.getStringExtra(TRACK)!!
         presenter.loadTrack(trackId)
 
         playButton.setOnClickListener {
@@ -160,7 +165,12 @@ class AudioPlayerActivity : AppCompatActivity(), PlayerScreenView {
         playButton.setImageResource(image)
     }
 
-    override fun setProgressTimeText(text: String) {
-        progressTime.text = text
+    override fun updadeProgressTime(currentTime: Int) {
+        progressTime.text =
+            SimpleDateFormat(PROGRESS_FORMAT, Locale.getDefault()).format(currentTime)
+    }
+
+    companion object {
+        private const val PROGRESS_FORMAT = "mm:ss"
     }
 }

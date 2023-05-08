@@ -11,4 +11,5 @@ interface SearchScreenView {
     fun showTracks(tracks: List<Track>)
     fun showTracksError()
     fun showLoading()
+    fun updateHistoryTracks(historyTracks: MutableList<Track>)
 }
