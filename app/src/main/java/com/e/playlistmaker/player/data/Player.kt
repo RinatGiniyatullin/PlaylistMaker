@@ -1,16 +1,21 @@
 package com.e.playlistmaker.player.data
 
+import android.content.SharedPreferences
 import android.media.MediaPlayer
 import com.e.playlistmaker.player.domain.IPlayer
 import com.e.playlistmaker.player.presentation.PlayerState
+import com.e.playlistmaker.search.data.HistorySearchDataStore
 
-class Player(private val previewUrl: String) : IPlayer {
+class Player(private val trackId: String, private val sharedPrefHistory: SharedPreferences) : IPlayer {
     override var playerState = PlayerState.STATE_DEFAULT
     private val mediaPlayer = MediaPlayer()
 
     init {
+        val track = HistorySearchDataStore(sharedPrefHistory).getHistory().firstOrNull { track ->
+            track.trackId == trackId
+        }
         mediaPlayer.apply {
-            setDataSource(previewUrl)
+            setDataSource(track?.previewUrl)
             setOnCompletionListener {
                 playerState = PlayerState.STATE_PREPARED
             }

@@ -114,11 +114,6 @@ class AudioPlayerPresenter(
         handler.removeCallbacksAndMessages(null)
     }
 
-    fun getPreviewUrl(trackId: String): String {
-        val track = interactor.loadTrack(trackId)!!
-        return track.previewUrl
-    }
-
     companion object {
         private const val DELAY = 300L
         private const val PROGRESS_FORMAT = "mm:ss"

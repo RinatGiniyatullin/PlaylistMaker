@@ -47,8 +47,7 @@ class AudioPlayerActivity : AppCompatActivity(), PlayerScreenView {
         val sharedPrefHistory = getSharedPreferences(HISTORY_PREFERENCES, MODE_PRIVATE)
         val historySearchDataStore = HistorySearchDataStore(sharedPrefHistory)
         val trackId = intent.getStringExtra(TRACK)!!
-        val previewUrl = presenter.getPreviewUrl(trackId)
-        val player = Player(previewUrl)
+        val player = Player(trackId, sharedPrefHistory)
 
         presenter = AudioPlayerPresenter(
             view = this,
