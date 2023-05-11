@@ -1,10 +1,10 @@
-package com.e.playlistmaker
+package com.e.playlistmaker.search.domain
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class ITunesAudio(
+data class Track(
     val trackName: String,
     val artistName: String,
     val trackTimeMillis: Long,
@@ -15,7 +15,7 @@ data class ITunesAudio(
     val primaryGenreName: String,
     val country: String,
     val previewUrl: String
-) : Parcelable {
+): Parcelable {
 
     fun getCoverArtwork() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
 

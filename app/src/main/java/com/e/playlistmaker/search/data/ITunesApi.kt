@@ -1,4 +1,4 @@
-package com.e.playlistmaker
+package com.e.playlistmaker.search.data
 
 import retrofit2.Call
 import retrofit2.http.*
