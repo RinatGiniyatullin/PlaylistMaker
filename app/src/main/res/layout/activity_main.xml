@@ -15,26 +15,32 @@
         android:textColor="@color/white"
         android:textSize="@dimen/text_normal" />
 
-    <Button
-        android:id="@+id/search"
-        style="@style/ButtonStyle"
-        android:layout_marginTop="40dp"
-        android:text="@string/search"
-        app:icon="@drawable/search" />
+        <Button
+            android:id="@+id/searchButton"
+            style="@style/ButtonStyle"
+            android:layout_marginTop="40dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="@string/search"
+            app:icon="@drawable/search" />
 
-    <Button
-        android:id="@+id/library"
-        style="@style/ButtonStyle"
-        android:layout_marginTop="@dimen/padding_large"
-        android:text="@string/library"
-        app:icon="@drawable/library" />
+        <Button
+            android:id="@+id/libraryButton"
+            style="@style/ButtonStyle"
+            android:layout_marginTop="@dimen/padding_large"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="@string/library"
+            app:icon="@drawable/library" />
 
-    <Button
-        android:id="@+id/settings"
-        style="@style/ButtonStyle"
-        android:layout_marginTop="@dimen/padding_large"
-        android:layout_marginBottom="28dp"
-        android:text="@string/settings"
-        app:icon="@drawable/settings" />
+        <Button
+            android:id="@+id/settingsButton"
+            style="@style/ButtonStyle"
+            android:layout_marginTop="@dimen/padding_large"
+            android:layout_marginBottom="28dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="@string/settings"
+            app:icon="@drawable/settings" />
 
 </LinearLayout>

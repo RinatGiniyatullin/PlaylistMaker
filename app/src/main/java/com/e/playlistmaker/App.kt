@@ -7,6 +7,7 @@ const val HISTORY_PREFERENCES = "History_preferences"
 const val SETTING_PREFERENCES = "Setting_preferences"
 const val DARK_THEME_KEY = "Dark_theme_key"
 const val TRACK = "Track"
+const val PROGRESS_FORMAT = "mm:ss"
 
 class App : Application() {
 
