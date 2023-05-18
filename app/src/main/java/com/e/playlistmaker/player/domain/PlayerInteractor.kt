@@ -1,6 +1,5 @@
 package com.e.playlistmaker.player.domain
 
-import com.e.playlistmaker.player.ui.PlayerState
 import com.e.playlistmaker.search.domain.Track
 
 interface PlayerInteractor {

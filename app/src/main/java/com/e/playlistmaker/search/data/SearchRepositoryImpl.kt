@@ -46,10 +46,10 @@ class SearchRepositoryImpl(private val api: ITunesApi) : SearchRepository {
             trackDto.artworkUrl100,
             trackDto.trackId,
             trackDto.collectionName,
-            trackDto.releaseDate ?: "",
+            trackDto.releaseDate.orEmpty(),
             trackDto.primaryGenreName,
             trackDto.country,
-            trackDto.previewUrl ?: ""
+            trackDto.previewUrl.orEmpty()
         )
     }
 }

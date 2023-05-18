@@ -23,7 +23,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         binding = ActivityAudioPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val trackId = intent.getStringExtra(TRACK)!!
+        val trackId = intent.getStringExtra(TRACK).orEmpty()
         viewModel = ViewModelProvider(
             this,
             PlayerViewModel.getViewModelFactory(this, trackId)

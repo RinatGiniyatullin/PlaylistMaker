@@ -3,7 +3,7 @@ package com.e.playlistmaker.player.data
 import android.content.SharedPreferences
 import android.media.MediaPlayer
 import com.e.playlistmaker.player.domain.Player
-import com.e.playlistmaker.player.ui.PlayerState
+import com.e.playlistmaker.player.domain.PlayerState
 import com.e.playlistmaker.search.data.HistorySearchDataStoreImpl
 
 class PlayerImpl(private val trackId: String, private val sharedPrefHistory: SharedPreferences) : Player {
