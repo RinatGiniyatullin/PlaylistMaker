@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".player.presentation.AudioPlayerActivity">
+        tools:context=".player.ui.AudioPlayerActivity">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/leftBigBarrier"
@@ -40,7 +40,7 @@
             app:layout_constraintGuide_end="@dimen/small_barrier_player" />
 
         <TextView
-            android:id="@+id/library_back"
+            android:id="@+id/button_back"
             android:layout_width="@dimen/padding_large"
             android:layout_height="@dimen/padding_large"
             android:layout_marginStart="@dimen/margin_s_normal"
@@ -59,7 +59,7 @@
             app:layout_constraintDimensionRatio="h,1:1"
             app:layout_constraintEnd_toEndOf="@id/rightBigBarrier"
             app:layout_constraintStart_toStartOf="@id/leftBigBarrier"
-            app:layout_constraintTop_toBottomOf="@id/library_back" />
+            app:layout_constraintTop_toBottomOf="@id/button_back" />
 
         <TextView
             android:id="@+id/trackName"
@@ -156,7 +156,7 @@
             android:id="@+id/trackTimeGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="visible"
+            android:visibility="gone"
             app:constraint_referenced_ids="trackTime,trackTimeValue" />
 
         <TextView
@@ -178,7 +178,7 @@
             android:id="@+id/collectionNameGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="visible"
+            android:visibility="gone"
             app:constraint_referenced_ids="collectionName,collectionNameValue" />
 
         <TextView
@@ -200,7 +200,7 @@
             android:id="@+id/releaseDateGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="visible"
+            android:visibility="gone"
             app:constraint_referenced_ids="releaseDate,releaseDateValue" />
 
         <TextView
@@ -221,7 +221,7 @@
             android:id="@+id/genreNameGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="visible"
+            android:visibility="gone"
             app:constraint_referenced_ids="genreName,genreNameValue" />
 
         <TextView
@@ -242,7 +242,7 @@
             android:id="@+id/countryGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="visible"
+            android:visibility="gone"
             app:constraint_referenced_ids="country,countryValue" />
 
         <TextView

@@ -24,4 +24,5 @@
     <string name="release_date">Год</string>
     <string name="genre_name">Жанр</string>
     <string name="country">Страна</string>
+    <string name="type_intent">*/*</string>
 </resources>
