@@ -3,20 +3,20 @@ package com.e.playlistmaker.player.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.e.playlistmaker.PROGRESS_FORMAT
 import com.e.playlistmaker.R
 import com.e.playlistmaker.TRACK
 import com.e.playlistmaker.databinding.ActivityAudioPlayerBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class AudioPlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAudioPlayerBinding
-    private lateinit var viewModel: PlayerViewModel
+    private val viewModel by viewModel<PlayerViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,10 +24,6 @@ class AudioPlayerActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val trackId = intent.getStringExtra(TRACK).orEmpty()
-        viewModel = ViewModelProvider(
-            this,
-            PlayerViewModel.getViewModelFactory(this, trackId)
-        )[PlayerViewModel::class.java]
 
         viewModel.showTrackLiveData.observe(this) { track ->
             showTrackCover(track.getCoverArtwork())
@@ -59,7 +55,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         viewModel.loadTrack(trackId)
 
         binding.playButton.setOnClickListener {
-            viewModel.playTrack()
+            viewModel.playTrack(trackId)
         }
 
         binding.buttonBack.setOnClickListener {

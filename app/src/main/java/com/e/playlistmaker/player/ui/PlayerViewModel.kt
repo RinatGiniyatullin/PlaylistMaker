@@ -1,26 +1,19 @@
 package com.e.playlistmaker.player.ui
 
-import android.app.Application
-import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.lifecycle.ViewModel
 import com.e.playlistmaker.PROGRESS_FORMAT
-import com.e.playlistmaker.creator.Creator
 import com.e.playlistmaker.player.domain.PlayerInteractor
 import com.e.playlistmaker.player.domain.PlayerState
 import com.e.playlistmaker.search.domain.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PlayerViewModel(application: Application, private val interactor: PlayerInteractor) :
-    AndroidViewModel(application) {
+class PlayerViewModel(private val interactor: PlayerInteractor) :
+    ViewModel() {
 
     private val handler = Handler(Looper.getMainLooper())
 
@@ -39,9 +32,9 @@ class PlayerViewModel(application: Application, private val interactor: PlayerIn
         handler.removeCallbacksAndMessages(null)
     }
 
-    private fun startPlayer() {
+    private fun startPlayer(previewUrl:String) {
         _buttonStateLiveData.postValue(ButtonState.Pause)
-        interactor.playTrack()
+        interactor.playTrack(previewUrl)
         handler.postDelayed(object : Runnable {
             override fun run() {
                 if (interactor.getPlayerState() == PlayerState.STATE_PREPARED) {
@@ -71,10 +64,14 @@ class PlayerViewModel(application: Application, private val interactor: PlayerIn
         _showTrackLiveData.postValue(track)
     }
 
-    fun playTrack() {
+    fun playTrack(trackId: String) {
         when (interactor.getPlayerState()) {
             PlayerState.STATE_PLAYING -> pausePlayer()
-            else -> startPlayer()
+            else -> {
+                val track = interactor.loadTrack(trackId)!!
+
+                startPlayer(track.previewUrl)
+            }
         }
     }
 
@@ -85,15 +82,5 @@ class PlayerViewModel(application: Application, private val interactor: PlayerIn
     companion object {
         private const val DELAY = 300L
         private const val TIME_START = 0
-
-        fun getViewModelFactory(context: Context, trackId: String): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    PlayerViewModel(
-                        this[APPLICATION_KEY] as Application,
-                        Creator.providePlayerInteractor(context, trackId)
-                    )
-                }
-            }
     }
 }
