@@ -1,6 +1,7 @@
 package com.e.playlistmaker.search.ui
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -9,14 +10,17 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.e.playlistmaker.App.Companion.TRACK
 import com.e.playlistmaker.search.domain.Track
 import com.e.playlistmaker.R
-import com.e.playlistmaker.creator.Creator
 import com.e.playlistmaker.databinding.ActivitySearchBinding
+import com.e.playlistmaker.player.ui.AudioPlayerActivity
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
+
+    private val viewModel by viewModel<SearchViewModel>()
 
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
@@ -24,8 +28,6 @@ class SearchActivity : AppCompatActivity() {
     private val adapterForHistory = TrackAdapter()
 
     private lateinit var binding: ActivitySearchBinding
-    private lateinit var viewModel: SearchViewModel
-    private lateinit var router: Router
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,12 +37,6 @@ class SearchActivity : AppCompatActivity() {
 
         initAdapter()
         initAdapterHistory()
-
-        router = Router(this)
-        viewModel =
-            ViewModelProvider(this, Creator.provideSearchViewModelFactory(this)).get(
-                SearchViewModel::class.java
-            )
 
         viewModel.state.observe(this) { state ->
             when (state) {
@@ -64,7 +60,7 @@ class SearchActivity : AppCompatActivity() {
 
         // нажатие на кнопку назад
         binding.buttonBack.setOnClickListener {
-            router.goBack()
+            finish()
         }
 
         // ввод текста
@@ -90,7 +86,7 @@ class SearchActivity : AppCompatActivity() {
             { track ->
                 if (clickDebounce()) {
                     viewModel.openTrack(track)
-                    router.openTrack(track.trackId)
+                    openTrack(track.trackId)
                 }
             }
 
@@ -99,7 +95,7 @@ class SearchActivity : AppCompatActivity() {
             { track ->
                 if (clickDebounce()) {
                     viewModel.openHistoryTrack(track)
-                    router.openTrack(track.trackId)
+                    openTrack(track.trackId)
                 }
             }
 
@@ -107,6 +103,12 @@ class SearchActivity : AppCompatActivity() {
         binding.buttonHistory.setOnClickListener {
             viewModel.clearHistory()
         }
+    }
+
+    private fun openTrack(trackId: String) {
+            val playerIntent = Intent(this, AudioPlayerActivity::class.java)
+            playerIntent.putExtra(TRACK, trackId)
+            startActivity(playerIntent)
     }
 
     override fun onDestroy() {

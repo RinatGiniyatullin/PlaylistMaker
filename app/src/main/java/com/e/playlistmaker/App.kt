@@ -2,26 +2,31 @@ package com.e.playlistmaker
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
-
-const val HISTORY_PREFERENCES = "History_preferences"
-const val SETTING_PREFERENCES = "Setting_preferences"
-const val DARK_THEME_KEY = "Dark_theme_key"
-const val TRACK = "Track"
-const val PROGRESS_FORMAT = "mm:ss"
+import com.e.playlistmaker.di.dataModule
+import com.e.playlistmaker.di.interactorModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
+import com.e.playlistmaker.di.repositoryModule
+import com.e.playlistmaker.di.viewModelModule
 
 class App : Application() {
 
-    var darkTheme = false
+    private var darkTheme = false
 
     override fun onCreate() {
         super.onCreate()
 
-        val sharedPrefs = getSharedPreferences(SETTING_PREFERENCES, MODE_PRIVATE)
+        startKoin {
+            androidContext(this@App)
+            modules(repositoryModule, dataModule, interactorModule, viewModelModule)
+        }
+
+        val sharedPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
         darkTheme = sharedPrefs.getBoolean(DARK_THEME_KEY, false)
         switchTheme(darkTheme)
     }
 
-    fun switchTheme(darkThemeEnabled: Boolean) {
+    private fun switchTheme(darkThemeEnabled: Boolean) {
         darkTheme = darkThemeEnabled
         AppCompatDelegate.setDefaultNightMode(
             if (darkThemeEnabled) {
@@ -30,5 +35,11 @@ class App : Application() {
                 AppCompatDelegate.MODE_NIGHT_NO
             }
         )
+    }
+
+    companion object {
+        const val PREFERENCES = "Preferences"
+        const val DARK_THEME_KEY = "Dark_theme_key"
+        const val TRACK = "Track"
     }
 }

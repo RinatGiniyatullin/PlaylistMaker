@@ -14,8 +14,8 @@ class PlayerInteractorImpl(
         }
     }
 
-    override fun playTrack() {
-        player.play()
+    override fun playTrack(previewUrl:String) {
+        player.play(previewUrl)
     }
 
     override fun pauseTrack() {
