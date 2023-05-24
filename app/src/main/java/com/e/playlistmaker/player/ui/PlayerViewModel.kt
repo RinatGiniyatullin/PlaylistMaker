@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.e.playlistmaker.player.domain.PlayerInteractor
 import com.e.playlistmaker.player.domain.PlayerState
-import com.e.playlistmaker.player.ui.DateTimeFormatter.Companion.PROGRESS_FORMAT
+import com.e.playlistmaker.player.ui.DateTimeFormatter.PROGRESS_FORMAT
 import com.e.playlistmaker.search.domain.Track
 import java.text.SimpleDateFormat
 import java.util.Locale

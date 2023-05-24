@@ -5,7 +5,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.e.playlistmaker.R
 import com.e.playlistmaker.databinding.TracksViewBinding
-import com.e.playlistmaker.player.ui.DateTimeFormatter.Companion.PROGRESS_FORMAT
+import com.e.playlistmaker.player.ui.DateTimeFormatter.PROGRESS_FORMAT
 import com.e.playlistmaker.search.domain.Track
 import java.text.SimpleDateFormat
 import java.util.*

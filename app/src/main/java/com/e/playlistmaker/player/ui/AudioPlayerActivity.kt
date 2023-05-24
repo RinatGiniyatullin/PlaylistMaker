@@ -8,7 +8,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.e.playlistmaker.App.Companion.TRACK
 import com.e.playlistmaker.R
 import com.e.playlistmaker.databinding.ActivityAudioPlayerBinding
-import com.e.playlistmaker.player.ui.DateTimeFormatter.Companion.PROGRESS_FORMAT
+import com.e.playlistmaker.player.ui.DateTimeFormatter.PROGRESS_FORMAT
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
