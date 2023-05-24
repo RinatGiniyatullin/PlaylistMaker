@@ -11,9 +11,9 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.e.playlistmaker.App.Companion.TRACK
 import com.e.playlistmaker.search.domain.Track
 import com.e.playlistmaker.R
-import com.e.playlistmaker.TRACK
 import com.e.playlistmaker.databinding.ActivitySearchBinding
 import com.e.playlistmaker.player.ui.AudioPlayerActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel

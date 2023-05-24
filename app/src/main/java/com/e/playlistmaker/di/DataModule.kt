@@ -1,7 +1,8 @@
 package com.e.playlistmaker.di
 
 import android.content.Context
-import com.e.playlistmaker.PREFERENCES
+import android.media.MediaPlayer
+import com.e.playlistmaker.App.Companion.PREFERENCES
 import com.e.playlistmaker.player.data.PlayerImpl
 import com.e.playlistmaker.player.domain.Player
 import com.e.playlistmaker.search.data.HistorySearchDataStoreImpl
@@ -34,7 +35,7 @@ val dataModule = module {
     }
 
     single<Player> {
-        PlayerImpl()
+        PlayerImpl(MediaPlayer())
     }
 
     single<SettingsDataStorage> {

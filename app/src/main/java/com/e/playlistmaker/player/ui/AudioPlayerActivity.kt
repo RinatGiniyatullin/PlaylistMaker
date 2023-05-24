@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.e.playlistmaker.PROGRESS_FORMAT
+import com.e.playlistmaker.App.Companion.TRACK
 import com.e.playlistmaker.R
-import com.e.playlistmaker.TRACK
 import com.e.playlistmaker.databinding.ActivityAudioPlayerBinding
+import com.e.playlistmaker.player.ui.DateTimeFormatter.Companion.PROGRESS_FORMAT
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Locale

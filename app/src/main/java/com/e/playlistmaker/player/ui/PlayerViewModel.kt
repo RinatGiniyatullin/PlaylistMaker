@@ -5,9 +5,9 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.e.playlistmaker.PROGRESS_FORMAT
 import com.e.playlistmaker.player.domain.PlayerInteractor
 import com.e.playlistmaker.player.domain.PlayerState
+import com.e.playlistmaker.player.ui.DateTimeFormatter.Companion.PROGRESS_FORMAT
 import com.e.playlistmaker.search.domain.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -32,7 +32,7 @@ class PlayerViewModel(private val interactor: PlayerInteractor) :
         handler.removeCallbacksAndMessages(null)
     }
 
-    private fun startPlayer(previewUrl:String) {
+    private fun startPlayer(previewUrl: String) {
         _buttonStateLiveData.postValue(ButtonState.Pause)
         interactor.playTrack(previewUrl)
         handler.postDelayed(object : Runnable {
@@ -69,7 +69,6 @@ class PlayerViewModel(private val interactor: PlayerInteractor) :
             PlayerState.STATE_PLAYING -> pausePlayer()
             else -> {
                 val track = interactor.loadTrack(trackId)!!
-
                 startPlayer(track.previewUrl)
             }
         }

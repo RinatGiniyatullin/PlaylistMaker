@@ -9,11 +9,6 @@ import org.koin.core.context.startKoin
 import com.e.playlistmaker.di.repositoryModule
 import com.e.playlistmaker.di.viewModelModule
 
-const val PREFERENCES = "Preferences"
-const val DARK_THEME_KEY = "Dark_theme_key"
-const val TRACK = "Track"
-const val PROGRESS_FORMAT = "mm:ss"
-
 class App : Application() {
 
     private var darkTheme = false
@@ -40,5 +35,11 @@ class App : Application() {
                 AppCompatDelegate.MODE_NIGHT_NO
             }
         )
+    }
+
+    companion object {
+        const val PREFERENCES = "Preferences"
+        const val DARK_THEME_KEY = "Dark_theme_key"
+        const val TRACK = "Track"
     }
 }
