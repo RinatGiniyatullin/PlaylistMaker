@@ -113,7 +113,7 @@
 
                 <Button
                     android:id="@+id/buttonHistory"
-                    style="@style/SearchButtonStyle"
+                    style="@style/ButtonStyle"
                     android:layout_below="@id/recyclerHistory"
                     android:layout_centerHorizontal="true"
                     android:text="@string/clear_history" />
@@ -157,7 +157,7 @@
 
             <Button
                 android:id="@+id/updateButton"
-                style="@style/SearchButtonStyle"
+                style="@style/ButtonStyle"
                 android:layout_gravity="center"
                 android:text="@string/update" />
 

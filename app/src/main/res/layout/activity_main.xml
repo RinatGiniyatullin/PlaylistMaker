@@ -17,7 +17,7 @@
 
         <Button
             android:id="@+id/searchButton"
-            style="@style/ButtonStyle"
+            style="@style/MainButtonStyle"
             android:layout_marginTop="40dp"
             android:insetTop="0dp"
             android:insetBottom="0dp"
@@ -26,7 +26,7 @@
 
         <Button
             android:id="@+id/libraryButton"
-            style="@style/ButtonStyle"
+            style="@style/MainButtonStyle"
             android:layout_marginTop="@dimen/padding_large"
             android:insetTop="0dp"
             android:insetBottom="0dp"
@@ -35,7 +35,7 @@
 
         <Button
             android:id="@+id/settingsButton"
-            style="@style/ButtonStyle"
+            style="@style/MainButtonStyle"
             android:layout_marginTop="@dimen/padding_large"
             android:layout_marginBottom="28dp"
             android:insetTop="0dp"
