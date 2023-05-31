@@ -8,23 +8,17 @@ import com.e.playlistmaker.settings.domain.SettingsInteractor
 import com.e.playlistmaker.settings.domain.SettingsInteractorImpl
 import com.e.playlistmaker.sharing.domain.SharingInteractor
 import com.e.playlistmaker.sharing.domain.SharingInteractorImpl
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val interactorModule = module {
 
-    single<SearchInteractor> {
-        SearchInteractorImpl(get(), get())
-    }
+    singleOf(::SearchInteractorImpl).bind<SearchInteractor>()
 
-    single<PlayerInteractor> {
-        PlayerInteractorImpl(get(), get())
-    }
+    singleOf(::PlayerInteractorImpl).bind<PlayerInteractor>()
 
-    single<SettingsInteractor> {
-        SettingsInteractorImpl(get())
-    }
+    singleOf(::SettingsInteractorImpl).bind<SettingsInteractor>()
 
-    single<SharingInteractor> {
-        SharingInteractorImpl(get())
-    }
+    singleOf(::SharingInteractorImpl).bind<SharingInteractor>()
 }

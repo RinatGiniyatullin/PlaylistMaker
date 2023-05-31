@@ -31,19 +31,7 @@
         app:tabIndicatorFullWidth="true"
         app:tabMode="fixed"
         app:tabTextAppearance="@style/TextForLibraryTab"
-        app:tabTextColor="?attr/colorSecondary">
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/favorite_tracks" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/playlist" />
-
-    </com.google.android.material.tabs.TabLayout>
+        app:tabTextColor="?attr/colorSecondary" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
