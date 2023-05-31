@@ -5,8 +5,10 @@
     <dimen name="padding_large">16dp</dimen>
     <dimen name="small_radius">2dp</dimen>
     <dimen name="text_small">16sp</dimen>
+    <dimen name="text_library_tab">14sp</dimen>
     <dimen name="margin_small">8dp</dimen>
     <dimen name="text_s_small">11sp</dimen>
+    <dimen name="text_library_error">19sp</dimen>
     <dimen name="icon_size">45dp</dimen>
     <dimen name="icon_start">13dp</dimen>
     <dimen name="margin_large">14dp</dimen>

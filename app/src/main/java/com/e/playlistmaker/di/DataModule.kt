@@ -13,6 +13,8 @@ import com.e.playlistmaker.settings.data.SharedPrefsSettingsDataStorage
 import com.e.playlistmaker.sharing.data.ExternalNavigator
 import com.e.playlistmaker.sharing.data.ExternalNavigatorImpl
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -30,17 +32,13 @@ val dataModule = module {
         androidContext().getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE)
     }
 
-    single<HistorySearchDataStore> {
-        HistorySearchDataStoreImpl(get())
-    }
+    singleOf(::HistorySearchDataStoreImpl).bind<HistorySearchDataStore>()
 
     single<Player> {
         PlayerImpl(MediaPlayer())
     }
 
-    single<SettingsDataStorage> {
-        SharedPrefsSettingsDataStorage(get())
-    }
+    singleOf(::SharedPrefsSettingsDataStorage).bind<SettingsDataStorage>()
 
     single<ExternalNavigator> {
         ExternalNavigatorImpl(androidContext())

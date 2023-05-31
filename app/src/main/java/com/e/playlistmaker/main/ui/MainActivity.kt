@@ -3,7 +3,7 @@ package com.e.playlistmaker.main.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.e.playlistmaker.LibraryActivity
+import com.e.playlistmaker.library.ui.LibraryActivity
 import com.e.playlistmaker.databinding.ActivityMainBinding
 import com.e.playlistmaker.settings.ui.SettingsActivity
 import com.e.playlistmaker.search.ui.SearchActivity
