@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/libraryFragment">
+
+    <fragment
+        android:id="@+id/libraryFragment"
+        android:name="com.e.playlistmaker.library.ui.LibraryFragment"
+        android:label="fragment_library"
+        tools:layout="@layout/fragment_library" />
+    <fragment
+        android:id="@+id/favoriteTracksFragment"
+        android:name="com.e.playlistmaker.library.ui.favoriteTracks.FavoriteTracksFragment"
+        android:label="fragment_favorite_tracks"
+        tools:layout="@layout/fragment_favorite_tracks" />
+    <fragment
+        android:id="@+id/playlistFragment"
+        android:name="com.e.playlistmaker.library.ui.playlist.PlaylistFragment"
+        android:label="fragment_playlist"
+        tools:layout="@layout/fragment_playlist" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.e.playlistmaker.search.ui.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_audioPlayerActivity"
+            app:destination="@id/audioPlayerActivity"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.e.playlistmaker.settings.ui.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+    <activity
+        android:id="@+id/audioPlayerActivity"
+        android:name="com.e.playlistmaker.player.ui.AudioPlayerActivity"
+        android:label="activity_audio_player"
+        tools:layout="@layout/activity_audio_player" />
+</navigation>

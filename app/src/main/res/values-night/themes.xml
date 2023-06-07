@@ -13,6 +13,7 @@
         <item name="colorButtonNormal">@color/text_gray</item>
         <item name="colorContainer">@color/black</item>
         <item name="colorAccent">@color/white25</item>
+        <item name="colorOnSurface">@color/blue</item>
         <!-- Status bar color. -->
         <!-- Customize your theme here. -->
     </style>
