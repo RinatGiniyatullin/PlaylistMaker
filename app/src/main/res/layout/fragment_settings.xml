@@ -28,8 +28,10 @@
         android:layout_marginHorizontal="@dimen/padding_large"
         android:layout_marginTop="40dp"
         android:height="@dimen/height_for_settings"
-        android:text="@string/dark_theme" />
+        android:text="@string/dark_theme"
+       android:theme="@style/SwitchTheme"
 
+       />
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_for_settings"

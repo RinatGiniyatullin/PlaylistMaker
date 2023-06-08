@@ -39,4 +39,9 @@
         <item name="switchStyle">@color/blue</item>
     </style>
 
+    <style name="SwitchTheme">
+        <item name="thumbTint">@color/blue</item>
+        <item name="trackTint">@color/blue48</item>
+    </style>
+
 </resources>

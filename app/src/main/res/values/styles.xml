@@ -87,4 +87,9 @@
         <item name="android:fontFamily">@font/ys_display_regular</item>
     </style>
 
+    <style name="SwitchTheme">
+        <item name="thumbTint">@color/text_gray</item>
+        <item name="trackTint">@color/light_gray</item>
+    </style>
+
 </resources>
