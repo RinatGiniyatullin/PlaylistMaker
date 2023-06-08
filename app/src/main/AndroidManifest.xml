@@ -15,8 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PlaylistMaker"
 
-
-
         tools:targetApi="31">
         <activity
             android:name=".player.ui.AudioPlayerActivity"
@@ -25,28 +23,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity
-            android:name=".search.ui.SearchActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".library.ui.LibraryActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".settings.ui.SettingsActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+
         <activity
             android:name=".main.ui.MainActivity"
             android:exported="true"
