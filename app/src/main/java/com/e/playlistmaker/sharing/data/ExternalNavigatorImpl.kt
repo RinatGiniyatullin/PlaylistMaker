@@ -40,9 +40,9 @@ class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
     }
 
     private fun checkIntent(intent: Intent) {
-        if (intent.resolveActivity(context.packageManager) != null) {
+        try {
             context.startActivity(intent)
-        } else {
+        } catch (e: Exception) {
             Toast.makeText(context, warning, Toast.LENGTH_LONG).show()
         }
     }
