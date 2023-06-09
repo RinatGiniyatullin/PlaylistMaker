@@ -2,23 +2,26 @@ package com.e.playlistmaker.search.ui
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.e.playlistmaker.App.Companion.TRACK
-import com.e.playlistmaker.search.domain.Track
+import com.e.playlistmaker.App
 import com.e.playlistmaker.R
-import com.e.playlistmaker.databinding.ActivitySearchBinding
+import com.e.playlistmaker.databinding.FragmentSearchBinding
 import com.e.playlistmaker.player.ui.AudioPlayerActivity
+import com.e.playlistmaker.search.domain.Track
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
 
     private val viewModel by viewModel<SearchViewModel>()
 
@@ -27,18 +30,26 @@ class SearchActivity : AppCompatActivity() {
     private val adapter = TrackAdapter()
     private val adapterForHistory = TrackAdapter()
 
-    private lateinit var binding: ActivitySearchBinding
+    private lateinit var binding: FragmentSearchBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
 
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? {
+
+        binding = FragmentSearchBinding.inflate(layoutInflater)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         initAdapter()
         initAdapterHistory()
 
-        viewModel.state.observe(this) { state ->
+        viewModel.state.observe(viewLifecycleOwner) { state ->
             when (state) {
                 SearchState.Empty -> showEmptyResult()
                 is SearchState.Error -> showTracksError()
@@ -56,11 +67,6 @@ class SearchActivity : AppCompatActivity() {
         // нажатие на крестик
         binding.clearButton.setOnClickListener {
             viewModel.clearSearchText()
-        }
-
-        // нажатие на кнопку назад
-        binding.buttonBack.setOnClickListener {
-            finish()
         }
 
         // ввод текста
@@ -106,13 +112,14 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun openTrack(trackId: String) {
-            val playerIntent = Intent(this, AudioPlayerActivity::class.java)
-            playerIntent.putExtra(TRACK, trackId)
-            startActivity(playerIntent)
+
+         val playerIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
+         playerIntent.putExtra(App.TRACK, trackId)
+         startActivity(playerIntent)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         viewModel.onDestroyView()
     }
 
@@ -141,7 +148,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun hideKeyboard() {
         val inputMethodManager =
-            getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         inputMethodManager?.hideSoftInputFromWindow(binding.inputText.windowToken, 0)
     }
 
@@ -197,12 +204,12 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun initAdapter() {
-        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
     }
 
     private fun initAdapterHistory() {
-        binding.recyclerHistory.layoutManager = LinearLayoutManager(this)
+        binding.recyclerHistory.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerHistory.adapter = adapterForHistory
     }
 

@@ -21,8 +21,6 @@ class SettingsViewModel(
         _theme.postValue(saveTheme)
     }
 
-    private var darkTheme: Boolean = false
-
     fun shareApp() {
         sharingInteractor.shareApp()
     }
@@ -42,7 +40,6 @@ class SettingsViewModel(
     }
 
     private fun switchTheme(darkThemeEnabled: Boolean) {
-        darkTheme = darkThemeEnabled
         AppCompatDelegate.setDefaultNightMode(
             if (darkThemeEnabled) {
                 AppCompatDelegate.MODE_NIGHT_YES

@@ -1,46 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorPrimary"
-    android:orientation="vertical">
+    tools:context=".main.ui.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/rootFragmentContainerView"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/navigation_graph" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+        android:background="@color/light_gray"/>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/padding_large"
-        android:layout_marginTop="14dp"
-        android:text="@string/app_name"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_normal" />
+        android:background="?attr/colorSecondaryVariant"
+        app:itemIconTint="@color/bnv_tab_item_color"
+        app:itemTextAppearanceActive="@style/BNVText"
+        app:itemTextAppearanceInactive="@style/BNVText"
+        app:itemTextColor="@color/bnv_tab_item_color"
 
-        <Button
-            android:id="@+id/searchButton"
-            style="@style/MainButtonStyle"
-            android:layout_marginTop="40dp"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:text="@string/search"
-            app:icon="@drawable/search" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_navigation_menu" />
 
-        <Button
-            android:id="@+id/libraryButton"
-            style="@style/MainButtonStyle"
-            android:layout_marginTop="@dimen/padding_large"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:text="@string/library"
-            app:icon="@drawable/library" />
-
-        <Button
-            android:id="@+id/settingsButton"
-            style="@style/MainButtonStyle"
-            android:layout_marginTop="@dimen/padding_large"
-            android:layout_marginBottom="28dp"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:text="@string/settings"
-            app:icon="@drawable/settings" />
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

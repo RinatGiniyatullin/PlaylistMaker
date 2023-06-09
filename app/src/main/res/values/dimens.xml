@@ -25,4 +25,6 @@
     <dimen name="big_button_size_player">84dp</dimen>
     <dimen name="description_text_player">13sp</dimen>
     <dimen name="margin_top_description_player">17dp</dimen>
+    <dimen name="margin_top_for_page_title">14dp</dimen>
+    <dimen name="margin_start_for_page_title">16dp</dimen>
 </resources>

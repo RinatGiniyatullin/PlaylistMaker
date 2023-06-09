@@ -11,8 +11,6 @@ import com.e.playlistmaker.di.viewModelModule
 
 class App : Application() {
 
-    private var darkTheme = false
-
     override fun onCreate() {
         super.onCreate()
 
@@ -22,12 +20,11 @@ class App : Application() {
         }
 
         val sharedPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
-        darkTheme = sharedPrefs.getBoolean(DARK_THEME_KEY, false)
+        val darkTheme = sharedPrefs.getBoolean(DARK_THEME_KEY, false)
         switchTheme(darkTheme)
     }
 
     private fun switchTheme(darkThemeEnabled: Boolean) {
-        darkTheme = darkThemeEnabled
         AppCompatDelegate.setDefaultNightMode(
             if (darkThemeEnabled) {
                 AppCompatDelegate.MODE_NIGHT_YES
