@@ -1,41 +1,33 @@
 package com.e.playlistmaker.search.data
 
-import com.e.playlistmaker.search.data.dto.ITunesResponse
 import com.e.playlistmaker.search.data.dto.TrackDto
 import com.e.playlistmaker.search.data.network.ITunesApi
 import com.e.playlistmaker.search.domain.Track
 import com.e.playlistmaker.search.domain.SearchRepository
 import com.e.playlistmaker.search.domain.TracksLoadResultListener
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class SearchRepositoryImpl(private val api: ITunesApi) : SearchRepository {
 
     override var tracksLoadResultListener: TracksLoadResultListener? = null
 
-    override fun loadTracks(query: String) {
+    override suspend fun loadTracks(query: String) {
 
-        api.search(query)
-            .enqueue(object : Callback<ITunesResponse> {
-                override fun onResponse(
-                    call: Call<ITunesResponse>,
-                    response: Response<ITunesResponse>,
-                ) {
-                    if (response.code() == 200) {
-                        val tracks =
-                            response.body()?.results!!.map { mapTrack(it) }.filter { track ->
-                                track.previewUrl != null
-                            }
-                        tracksLoadResultListener?.onSuccess(tracks = tracks)
-
-                    }
+        withContext(Dispatchers.IO) {
+            val response = api.search(query)
+            try {
+                response.apply {
+                    val tracks =
+                        response.results!!.map { mapTrack(it) }.filter { track ->
+                            track.previewUrl != null
+                        }
+                    tracksLoadResultListener?.onSuccess(tracks = tracks)
                 }
-
-                override fun onFailure(call: Call<ITunesResponse>, t: Throwable) {
-                    tracksLoadResultListener?.onError()
-                }
-            })
+            } catch (e: Throwable) {
+                tracksLoadResultListener?.onError()
+            }
+        }
     }
 
     private fun mapTrack(trackDto: TrackDto): Track {

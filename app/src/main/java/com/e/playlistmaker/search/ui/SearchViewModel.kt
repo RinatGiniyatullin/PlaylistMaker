@@ -3,9 +3,11 @@ package com.e.playlistmaker.search.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.e.playlistmaker.search.domain.SearchInteractor
 import com.e.playlistmaker.search.domain.Track
 import com.e.playlistmaker.search.domain.TracksLoadResultListener
+import kotlinx.coroutines.launch
 
 
 class SearchViewModel(
@@ -47,9 +49,11 @@ class SearchViewModel(
             return
         }
         _state.postValue(SearchState.Loading)
-        interactor.loadTracks(
-            query = query
-        )
+        viewModelScope.launch {
+            interactor.loadTracks(
+                query = query
+            )
+        }
     }
 
     fun openHistoryTrack(track: Track) {

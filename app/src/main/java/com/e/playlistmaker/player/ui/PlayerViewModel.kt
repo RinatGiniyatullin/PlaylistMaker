@@ -38,40 +38,10 @@ class PlayerViewModel(private val interactor: PlayerInteractor) :
         handler.removeCallbacksAndMessages(null)
     }
 
-    /* private fun startPlayer(previewUrl: String) {
-         _buttonStateLiveData.postValue(ButtonState.Pause)
-         interactor.playTrack(previewUrl)
-         handler.postDelayed(object : Runnable {
-             override fun run() {
-                 if (interactor.getPlayerState() == PlayerState.STATE_PREPARED) {
-                     _timeLiveData.postValue(getFormat(TIME_START))
-                     _buttonStateLiveData.postValue(ButtonState.Play)
-                     handler.removeCallbacksAndMessages(null)
-                 } else {
-                     _timeLiveData.postValue(getFormat(interactor.getPlayerTime()))
-                     handler.postDelayed(this, DELAY)
-                 }
-             }
-         }, DELAY)
-     }*/
-
     private fun startPlayer(previewUrl: String) {
         _buttonStateLiveData.postValue(ButtonState.Pause)
         interactor.playTrack(previewUrl)
         startTimer()
-
-        /*handler.postDelayed(object : Runnable {
-            override fun run() {
-                if (interactor.getPlayerState() == PlayerState.STATE_PREPARED) {
-                    _timeLiveData.postValue(getFormat(TIME_START))
-                    _buttonStateLiveData.postValue(ButtonState.Play)
-                    handler.removeCallbacksAndMessages(null)
-                } else {
-                    _timeLiveData.postValue(getFormat(interactor.getPlayerTime()))
-                    handler.postDelayed(this, DELAY)
-                }
-            }
-        }, DELAY)*/
     }
 
     private fun startTimer() {
@@ -91,7 +61,6 @@ class PlayerViewModel(private val interactor: PlayerInteractor) :
         interactor.pauseTrack()
         timerJob?.cancel()
         _buttonStateLiveData.postValue(ButtonState.Play)
-        // handler.removeCallbacksAndMessages(null)
     }
 
     fun loadTrack(trackId: String) {
@@ -111,10 +80,5 @@ class PlayerViewModel(private val interactor: PlayerInteractor) :
 
     fun pause() {
         pausePlayer()
-    }
-
-    companion object {
-        private const val DELAY = 300L
-        private const val TIME_START = 0
     }
 }

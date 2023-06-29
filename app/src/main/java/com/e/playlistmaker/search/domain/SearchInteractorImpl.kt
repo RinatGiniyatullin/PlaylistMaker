@@ -13,7 +13,7 @@ class SearchInteractorImpl(
         return historySearchDataStore.getHistory()
     }
 
-    override fun loadTracks(query: String) {
+    override suspend fun loadTracks(query: String) {
         repository.loadTracks(query)
     }
 

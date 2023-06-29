@@ -3,8 +3,6 @@ package com.e.playlistmaker.search.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -13,8 +11,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.e.playlistmaker.App
 import com.e.playlistmaker.R
@@ -28,8 +24,6 @@ class SearchFragment : Fragment() {
 
     private val viewModel by viewModel<SearchViewModel>()
 
-    private var isClickAllowed = true
-    private val handler = Handler(Looper.getMainLooper())
     private val adapter = TrackAdapter()
     private val adapterForHistory = TrackAdapter()
 
@@ -228,7 +222,6 @@ class SearchFragment : Fragment() {
 
     private fun loadTracks(text: String) {
         viewModel.loadTracks(text)
-        // viewModel.loadTracks(binding.inputText.text.toString())
     }
 
     private fun initAdapter() {
@@ -240,21 +233,6 @@ class SearchFragment : Fragment() {
         binding.recyclerHistory.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerHistory.adapter = adapterForHistory
     }
-
-    /* private fun clickDebounce(): Boolean {
-         val current = isClickAllowed
-         if (isClickAllowed) {
-             isClickAllowed = false
-             handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-         }
-         return current
-     }*/
-
-    /*private fun searchDebounce() {
-        val searchRunnable = Runnable { loadTracks() }
-        handler.removeCallbacks(searchRunnable)
-        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
-    }*/
 
     private fun searchDebounce(text: String) {
         trackSearchDebounce(text)
