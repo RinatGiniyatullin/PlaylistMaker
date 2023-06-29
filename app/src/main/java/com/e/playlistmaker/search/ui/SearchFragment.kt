@@ -12,6 +12,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.e.playlistmaker.App
@@ -19,6 +21,7 @@ import com.e.playlistmaker.R
 import com.e.playlistmaker.databinding.FragmentSearchBinding
 import com.e.playlistmaker.player.ui.AudioPlayerActivity
 import com.e.playlistmaker.search.domain.Track
+import debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
@@ -31,6 +34,11 @@ class SearchFragment : Fragment() {
     private val adapterForHistory = TrackAdapter()
 
     private lateinit var binding: FragmentSearchBinding
+
+    private lateinit var onTrackClickDebounce: (Track) -> Unit
+    private lateinit var onHistoryTrackClickDebounce: (Track) -> Unit
+
+    private lateinit var trackSearchDebounce: (String) -> Unit
 
 
     override fun onCreateView(
@@ -74,7 +82,7 @@ class SearchFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                searchDebounce()
+                searchDebounce(s.toString())
                 binding.clearButton.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
                 binding.containerForHistory.visibility =
                     if (binding.inputText.hasFocus() && s?.isEmpty() == true) View.VISIBLE else View.GONE
@@ -87,35 +95,54 @@ class SearchFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
+
+        onTrackClickDebounce = debounce<Track>(
+            CLICK_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope,
+            false
+        ) { track ->
+            openTrack(track.trackId)
+            viewModel.openTrack(track)
+        }
+
         // нажатие на трек
         adapter.itemClickListener =
             { track ->
-                if (clickDebounce()) {
-                    viewModel.openTrack(track)
-                    openTrack(track.trackId)
-                }
+                onTrackClickDebounce(track)
             }
+
+        onHistoryTrackClickDebounce = debounce<Track>(
+            CLICK_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope,
+            false
+        ) { track ->
+            openTrack(track.trackId)
+            viewModel.openHistoryTrack(track)
+        }
 
         // нажатие на историю
         adapterForHistory.itemClickListener =
             { track ->
-                if (clickDebounce()) {
-                    viewModel.openHistoryTrack(track)
-                    openTrack(track.trackId)
-                }
+                onHistoryTrackClickDebounce(track)
             }
 
         // Очистка истории
         binding.buttonHistory.setOnClickListener {
             viewModel.clearHistory()
         }
+
+        trackSearchDebounce = debounce<String>(
+            SEARCH_DEBOUNCE_DELAY,
+            viewLifecycleOwner.lifecycleScope,
+            true
+        ) { text -> loadTracks(text) }
     }
 
     private fun openTrack(trackId: String) {
 
-         val playerIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
-         playerIntent.putExtra(App.TRACK, trackId)
-         startActivity(playerIntent)
+        val playerIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
+        playerIntent.putExtra(App.TRACK, trackId)
+        startActivity(playerIntent)
     }
 
     override fun onDestroyView() {
@@ -163,7 +190,7 @@ class SearchFragment : Fragment() {
 
         binding.errorImage.setImageResource(R.drawable.no_connection)
         binding.errorText.text = NO_CONNECTION
-        binding.updateButton.setOnClickListener { loadTracks() }
+        binding.updateButton.setOnClickListener { loadTracks(binding.inputText.text.toString()) }
     }
 
     private fun showEmptyResult() {
@@ -199,8 +226,9 @@ class SearchFragment : Fragment() {
         binding.containerForProgressBar.visibility = View.VISIBLE
     }
 
-    private fun loadTracks() {
-        viewModel.loadTracks(binding.inputText.text.toString())
+    private fun loadTracks(text: String) {
+        viewModel.loadTracks(text)
+        // viewModel.loadTracks(binding.inputText.text.toString())
     }
 
     private fun initAdapter() {
@@ -213,19 +241,23 @@ class SearchFragment : Fragment() {
         binding.recyclerHistory.adapter = adapterForHistory
     }
 
-    private fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-        }
-        return current
-    }
+    /* private fun clickDebounce(): Boolean {
+         val current = isClickAllowed
+         if (isClickAllowed) {
+             isClickAllowed = false
+             handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+         }
+         return current
+     }*/
 
-    private fun searchDebounce() {
+    /*private fun searchDebounce() {
         val searchRunnable = Runnable { loadTracks() }
         handler.removeCallbacks(searchRunnable)
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }*/
+
+    private fun searchDebounce(text: String) {
+        trackSearchDebounce(text)
     }
 
     companion object {
