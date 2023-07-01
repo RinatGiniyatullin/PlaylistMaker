@@ -1,7 +1,8 @@
 package com.e.playlistmaker.search.domain
 
-interface SearchRepository {
-    var tracksLoadResultListener: TracksLoadResultListener?
+import kotlinx.coroutines.flow.Flow
 
-    suspend fun loadTracks(query: String)
+interface SearchRepository {
+
+    suspend fun loadTracks(query: String): Flow<List<Track>>
 }

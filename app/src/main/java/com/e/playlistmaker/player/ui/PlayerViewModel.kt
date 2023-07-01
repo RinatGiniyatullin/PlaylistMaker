@@ -1,7 +1,5 @@
 package com.e.playlistmaker.player.ui
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,8 +19,6 @@ class PlayerViewModel(private val interactor: PlayerInteractor) :
 
     private var timerJob: Job? = null
 
-    private val handler = Handler(Looper.getMainLooper())
-
     private var _showTrackLiveData = MutableLiveData<Track>()
     val showTrackLiveData: LiveData<Track> = _showTrackLiveData
 
@@ -35,20 +31,24 @@ class PlayerViewModel(private val interactor: PlayerInteractor) :
     override fun onCleared() {
         super.onCleared()
         interactor.stopPlayer()
-        handler.removeCallbacksAndMessages(null)
     }
 
     private fun startPlayer(previewUrl: String) {
         _buttonStateLiveData.postValue(ButtonState.Pause)
         interactor.playTrack(previewUrl)
         startTimer()
+
     }
 
     private fun startTimer() {
         timerJob = viewModelScope.launch {
-            while (interactor.getPlayerState()==PlayerState.STATE_PLAYING) {
-                delay(300L)
+            while (interactor.getPlayerState() == PlayerState.STATE_PLAYING) {
+                delay(TIMER_DELAY)
                 _timeLiveData.postValue(getFormat(interactor.getPlayerTime()))
+            }
+            if (interactor.getPlayerState() == PlayerState.STATE_PREPARED) {
+                _timeLiveData.postValue(getFormat(START_TIME))
+                _buttonStateLiveData.postValue(ButtonState.Play)
             }
         }
     }
@@ -80,5 +80,10 @@ class PlayerViewModel(private val interactor: PlayerInteractor) :
 
     fun pause() {
         pausePlayer()
+    }
+
+    companion object {
+        private const val TIMER_DELAY = 300L
+        private const val START_TIME = 0
     }
 }

@@ -1,5 +1,7 @@
 package com.e.playlistmaker.search.domain
 
+import kotlinx.coroutines.flow.Flow
+
 
 class SearchInteractorImpl(
     private val historySearchDataStore: HistorySearchDataStore,
@@ -13,20 +15,12 @@ class SearchInteractorImpl(
         return historySearchDataStore.getHistory()
     }
 
-    override suspend fun loadTracks(query: String) {
-        repository.loadTracks(query)
+    override suspend fun loadTracks(query: String): Flow<List<Track>> {
+        return repository.loadTracks(query)
     }
 
     override fun writeHistory(historyTracks: List<Track>) {
         historySearchDataStore.writeHistory(historyTracks)
-    }
-
-    override fun subscribeOnTracksLoadResult(listener: TracksLoadResultListener) {
-        repository.tracksLoadResultListener = listener
-    }
-
-    override fun unsubscribeFromTracksLoadResult() {
-        repository.tracksLoadResultListener = null
     }
 }
 

@@ -139,11 +139,6 @@ class SearchFragment : Fragment() {
         startActivity(playerIntent)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        viewModel.onDestroyView()
-    }
-
     private fun showHistory(historyTracks: List<Track>, clearText: Boolean) {
 
         if (clearText) {

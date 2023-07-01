@@ -4,31 +4,26 @@ import com.e.playlistmaker.search.data.dto.TrackDto
 import com.e.playlistmaker.search.data.network.ITunesApi
 import com.e.playlistmaker.search.domain.Track
 import com.e.playlistmaker.search.domain.SearchRepository
-import com.e.playlistmaker.search.domain.TracksLoadResultListener
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 
 class SearchRepositoryImpl(private val api: ITunesApi) : SearchRepository {
 
-    override var tracksLoadResultListener: TracksLoadResultListener? = null
+    override suspend fun loadTracks(query: String): Flow<List<Track>> = flow {
 
-    override suspend fun loadTracks(query: String) {
+        val response = api.search(query)
 
-        withContext(Dispatchers.IO) {
-            val response = api.search(query)
-            try {
-                response.apply {
-                    val tracks =
-                        response.results!!.map { mapTrack(it) }.filter { track ->
-                            track.previewUrl != null
-                        }
-                    tracksLoadResultListener?.onSuccess(tracks = tracks)
+        response.apply {
+            val tracks =
+                response.results.map { mapTrack(it) }.filter { track ->
+                    track.previewUrl != null
                 }
-            } catch (e: Throwable) {
-                tracksLoadResultListener?.onError()
-            }
+            emit(tracks)
         }
-    }
+    }.flowOn(Dispatchers.IO).catch { throw IllegalStateException() }
 
     private fun mapTrack(trackDto: TrackDto): Track {
         return Track(
