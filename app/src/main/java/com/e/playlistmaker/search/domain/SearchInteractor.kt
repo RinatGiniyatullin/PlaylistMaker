@@ -1,10 +1,10 @@
 package com.e.playlistmaker.search.domain
 
-interface SearchInteractor{
+import kotlinx.coroutines.flow.Flow
+
+interface SearchInteractor {
     fun clearHistory()
     fun getHistory(): List<Track>
-    fun loadTracks(query: String)
+    suspend fun loadTracks(query: String): Flow<List<Track>>
     fun writeHistory(historyTracks: List<Track>)
-    fun unsubscribeFromTracksLoadResult()
-    fun subscribeOnTracksLoadResult(listener: TracksLoadResultListener)
 }

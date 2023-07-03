@@ -3,9 +3,10 @@ package com.e.playlistmaker.search.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.e.playlistmaker.search.domain.SearchInteractor
 import com.e.playlistmaker.search.domain.Track
-import com.e.playlistmaker.search.domain.TracksLoadResultListener
+import kotlinx.coroutines.launch
 
 
 class SearchViewModel(
@@ -18,20 +19,6 @@ class SearchViewModel(
     val state: LiveData<SearchState> = _state
 
     init {
-        interactor.subscribeOnTracksLoadResult(object : TracksLoadResultListener {
-            override fun onSuccess(tracks: List<Track>) {
-                if (tracks.isEmpty()) {
-                    _state.postValue(SearchState.Empty)
-                } else {
-                    _state.postValue(SearchState.Tracks(tracks))
-                }
-            }
-
-            override fun onError() {
-                _state.postValue(SearchState.Error)
-            }
-        })
-
         historyTracks.addAll(interactor.getHistory())
     }
 
@@ -47,9 +34,27 @@ class SearchViewModel(
             return
         }
         _state.postValue(SearchState.Loading)
-        interactor.loadTracks(
-            query = query
-        )
+
+        viewModelScope.launch {
+            try {
+                interactor.loadTracks(query = query)
+                    .collect { positiveResult(it) }
+            } catch (e: Exception) {
+                errorResult()
+            }
+        }
+    }
+
+    private fun positiveResult(tracks: List<Track>) {
+        if (tracks.isEmpty()) {
+            _state.postValue(SearchState.Empty)
+        } else {
+            _state.postValue(SearchState.Tracks(tracks))
+        }
+    }
+
+    private fun errorResult() {
+        _state.postValue(SearchState.Error)
     }
 
     fun openHistoryTrack(track: Track) {
@@ -57,10 +62,6 @@ class SearchViewModel(
         historyTracks.add(0, track)
         interactor.writeHistory(historyTracks)
         _state.postValue(SearchState.History(historyTracks))
-    }
-
-    fun onDestroyView() {
-        interactor.unsubscribeFromTracksLoadResult()
     }
 
     fun clearHistory() {

@@ -8,26 +8,40 @@ class PlayerImpl(private val mediaPlayer: MediaPlayer) : Player {
     override var playerState = PlayerState.STATE_DEFAULT
 
     override fun play(previewUrl: String) {
-        if (playerState == PlayerState.STATE_DEFAULT) {
-            mediaPlayer.apply {
-                setDataSource(previewUrl)
-                prepare()
+        when (playerState) {
+            PlayerState.STATE_DEFAULT -> {
+                mediaPlayer.apply {
+                    reset()
+                    setDataSource(previewUrl)
+                    prepare()
+                    setOnCompletionListener {
+                        playerState = PlayerState.STATE_PREPARED
+                    }
+                    playerState = PlayerState.STATE_PREPARED
+                    mediaPlayer.start()
+                    playerState = PlayerState.STATE_PLAYING
+                }
             }
-            playerState = PlayerState.STATE_PREPARED
+
+            else -> {
+                mediaPlayer.start()
+                playerState = PlayerState.STATE_PLAYING
+            }
         }
-        mediaPlayer.start()
-        playerState = PlayerState.STATE_PLAYING
     }
 
     override fun pause() {
-        mediaPlayer.pause()
-        playerState = PlayerState.STATE_PAUSED
+        if (playerState == PlayerState.STATE_PLAYING) {
+            mediaPlayer.pause()
+            playerState = PlayerState.STATE_PAUSED
+        }
     }
 
     override fun releasePlayer() {
         mediaPlayer.apply {
             stop()
             reset()
+            setOnCompletionListener(null)
         }
         playerState = PlayerState.STATE_DEFAULT
     }

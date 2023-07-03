@@ -1,42 +1,29 @@
 package com.e.playlistmaker.search.data
 
-import com.e.playlistmaker.search.data.dto.ITunesResponse
 import com.e.playlistmaker.search.data.dto.TrackDto
 import com.e.playlistmaker.search.data.network.ITunesApi
 import com.e.playlistmaker.search.domain.Track
 import com.e.playlistmaker.search.domain.SearchRepository
-import com.e.playlistmaker.search.domain.TracksLoadResultListener
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 
 class SearchRepositoryImpl(private val api: ITunesApi) : SearchRepository {
 
-    override var tracksLoadResultListener: TracksLoadResultListener? = null
+    override suspend fun loadTracks(query: String): Flow<List<Track>> = flow {
 
-    override fun loadTracks(query: String) {
+        val response = api.search(query)
 
-        api.search(query)
-            .enqueue(object : Callback<ITunesResponse> {
-                override fun onResponse(
-                    call: Call<ITunesResponse>,
-                    response: Response<ITunesResponse>,
-                ) {
-                    if (response.code() == 200) {
-                        val tracks =
-                            response.body()?.results!!.map { mapTrack(it) }.filter { track ->
-                                track.previewUrl != null
-                            }
-                        tracksLoadResultListener?.onSuccess(tracks = tracks)
-
-                    }
+        response.apply {
+            val tracks =
+                response.results.map { mapTrack(it) }.filter { track ->
+                    track.previewUrl != null
                 }
-
-                override fun onFailure(call: Call<ITunesResponse>, t: Throwable) {
-                    tracksLoadResultListener?.onError()
-                }
-            })
-    }
+            emit(tracks)
+        }
+    }.flowOn(Dispatchers.IO).catch { throw IllegalStateException() }
 
     private fun mapTrack(trackDto: TrackDto): Track {
         return Track(
