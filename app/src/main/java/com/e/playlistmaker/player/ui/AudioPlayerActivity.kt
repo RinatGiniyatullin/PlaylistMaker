@@ -8,6 +8,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.e.playlistmaker.App.Companion.TRACK
 import com.e.playlistmaker.R
 import com.e.playlistmaker.databinding.ActivityAudioPlayerBinding
+import com.e.playlistmaker.library.ui.favoriteTracks.FavoriteState
+import com.e.playlistmaker.library.ui.favoriteTracks.FavoriteTracksViewModel
 import com.e.playlistmaker.player.ui.DateTimeFormatter.PROGRESS_FORMAT
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
@@ -17,6 +19,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAudioPlayerBinding
     private val viewModel by viewModel<PlayerViewModel>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,13 +45,21 @@ class AudioPlayerActivity : AppCompatActivity() {
             ) showReleaseDateText(track.getReleaseDateOnlyYear())
             if (track.primaryGenreName.isNotEmpty()) showGenreNameText(track.primaryGenreName)
             if (track.country.isNotEmpty()) showCountryText(track.country)
+
+            binding.likeButton.setOnClickListener {
+                viewModel.onFavoriteClicked(track)
+            }
         }
 
         viewModel.timeLiveData.observe(this) { currentTime ->
             updateProgressTime(currentTime)
         }
 
-        viewModel.buttonStateLiveData.observe(this) { state ->
+        viewModel.playButtonStateLiveData.observe(this) { state ->
+            setImageButton(state.imageButton)
+        }
+
+        viewModel.likeButtonStateLiveData.observe(this) { state ->
             setImageButton(state.imageButton)
         }
 
@@ -111,6 +122,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private fun setImageButton(image: Int) {
         binding.playButton.setImageResource(image)
+        binding.likeButton.setImageResource(image)
     }
 
     private fun updateProgressTime(currentTime: String) {

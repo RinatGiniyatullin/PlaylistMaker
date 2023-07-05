@@ -40,7 +40,6 @@ class SearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-
         binding = FragmentSearchBinding.inflate(layoutInflater)
         return binding.root
     }

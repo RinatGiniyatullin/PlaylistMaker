@@ -11,7 +11,7 @@ class SearchInteractorImpl(
         historySearchDataStore.clearHistory()
     }
 
-    override fun getHistory(): List<Track> {
+    override fun getHistory(): Flow<List<Track>> {
         return historySearchDataStore.getHistory()
     }
 

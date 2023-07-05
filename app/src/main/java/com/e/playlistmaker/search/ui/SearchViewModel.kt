@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.e.playlistmaker.search.domain.SearchInteractor
 import com.e.playlistmaker.search.domain.Track
 import kotlinx.coroutines.launch
+import kotlin.coroutines.coroutineContext
 
 
 class SearchViewModel(
@@ -19,14 +20,29 @@ class SearchViewModel(
     val state: LiveData<SearchState> = _state
 
     init {
-        historyTracks.addAll(interactor.getHistory())
+        loadHistory()
+        //historyTracks.addAll(interactor.getHistory())
     }
 
     fun searchFocusChanged(hasFocus: Boolean, text: String) {
-        val historyTracks = interactor.getHistory()
+        //   val historyTracks = interactor.getHistory()
+        val historyTracks = loadHistory()
         if (hasFocus && text.isEmpty() && historyTracks.isNotEmpty()) {
             _state.postValue(SearchState.History(historyTracks))
         }
+    }
+
+    fun loadHistory(): List<Track> {
+        val historyTracks = mutableListOf<Track>()
+        viewModelScope.launch {
+            try {
+                interactor.getHistory()
+                    .collect { list -> historyTracks.addAll(list) }
+            } catch (e: Exception) {
+                historyTracks.clear()
+            }
+        }
+        return historyTracks
     }
 
     fun loadTracks(query: String) {
@@ -66,11 +82,11 @@ class SearchViewModel(
 
     fun clearHistory() {
         interactor.clearHistory()
-        _state.postValue(SearchState.History(interactor.getHistory()))
+        _state.postValue(SearchState.History(loadHistory()))
     }
 
     fun clearSearchText() {
-        _state.postValue(SearchState.History(interactor.getHistory(), true))
+        _state.postValue(SearchState.History(loadHistory(), true))
     }
 
     fun openTrack(track: Track) {
