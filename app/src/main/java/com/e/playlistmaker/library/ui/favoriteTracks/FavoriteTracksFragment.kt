@@ -12,12 +12,9 @@ import com.e.playlistmaker.App
 import com.e.playlistmaker.databinding.FragmentFavoriteTracksBinding
 import com.e.playlistmaker.player.ui.AudioPlayerActivity
 import com.e.playlistmaker.search.domain.Track
-import com.e.playlistmaker.search.ui.SearchFragment
-import com.e.playlistmaker.search.ui.SearchViewModel
 import com.e.playlistmaker.search.ui.TrackAdapter
 import debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 
 class FavoriteTracksFragment : Fragment() {
 
@@ -31,11 +28,7 @@ class FavoriteTracksFragment : Fragment() {
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 
-    /* private val favoriteTracksViewModel: FavoriteTracksViewModel by viewModel {
-         parametersOf()
-     }*/
-
-    private val favoriteTracksViewModel by viewModel<FavoriteTracksViewModel>()
+    private val viewModel by viewModel<FavoriteTracksViewModel>()
 
     private lateinit var binding: FragmentFavoriteTracksBinding
 
@@ -55,14 +48,18 @@ class FavoriteTracksFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initAdapter()
-
-        favoriteTracksViewModel.favoriteLiveData.observe(viewLifecycleOwner) { state ->
+        viewModel.favoriteLiveData.observe(viewLifecycleOwner) { state ->
             when (state) {
                 FavoriteState.Empty -> showEmptyResult()
                 is FavoriteState.FavoriteTracks -> showFavoriteTracks(state.tracks)
             }
 
         }
+
+        adapter.itemClickListener =
+            { track ->
+                onTrackClickDebounce(track)
+            }
 
         onTrackClickDebounce = debounce<Track>(
             CLICK_DEBOUNCE_DELAY,
@@ -71,12 +68,6 @@ class FavoriteTracksFragment : Fragment() {
         ) { track ->
             openTrack(track.trackId)
         }
-
-        // нажатие на трек
-        adapter.itemClickListener =
-            { track ->
-                onTrackClickDebounce(track)
-            }
     }
 
     private fun showEmptyResult() {
@@ -92,11 +83,6 @@ class FavoriteTracksFragment : Fragment() {
         adapter.audio.addAll(tracks)
         adapter.notifyDataSetChanged()
     }
-
-   /* override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }*/
 
     private fun initAdapter() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())

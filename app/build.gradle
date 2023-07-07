@@ -6,10 +6,6 @@ plugins {
     id 'kotlin-kapt'
 }
 
-kotlin {
-    jvmToolchain(8)
-}
-
 android {
     namespace 'com.e.playlistmaker'
     compileSdk 33

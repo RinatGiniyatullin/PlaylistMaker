@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.e.playlistmaker.player.ui.LikeButtonState
 import com.e.playlistmaker.search.domain.SearchInteractor
 import com.e.playlistmaker.search.domain.Track
 import kotlinx.coroutines.launch
-import kotlin.coroutines.coroutineContext
 
 
 class SearchViewModel(
@@ -19,25 +19,27 @@ class SearchViewModel(
     private val _state = MutableLiveData<SearchState>()
     val state: LiveData<SearchState> = _state
 
+    private val _likeState = MutableLiveData<LikeButtonState>()
+    val likeState: LiveData<LikeButtonState> = _likeState
+
     init {
-        loadHistory()
-        //historyTracks.addAll(interactor.getHistory())
+        historyTracks.addAll(loadHistory())
     }
 
     fun searchFocusChanged(hasFocus: Boolean, text: String) {
-        //   val historyTracks = interactor.getHistory()
-        val historyTracks = loadHistory()
         if (hasFocus && text.isEmpty() && historyTracks.isNotEmpty()) {
             _state.postValue(SearchState.History(historyTracks))
         }
     }
 
-    fun loadHistory(): List<Track> {
-        val historyTracks = mutableListOf<Track>()
+    private fun loadHistory(): List<Track> {
         viewModelScope.launch {
             try {
                 interactor.getHistory()
-                    .collect { list -> historyTracks.addAll(list) }
+                    .collect { list ->
+                        historyTracks.clear()
+                        historyTracks.addAll(list)
+                    }
             } catch (e: Exception) {
                 historyTracks.clear()
             }
@@ -74,7 +76,15 @@ class SearchViewModel(
     }
 
     fun openHistoryTrack(track: Track) {
-        historyTracks.remove(track)
+        val result = historyTracks.firstOrNull { historyTrack ->
+            historyTrack.trackId == track.trackId
+        }
+
+        if (result != null) {
+            historyTracks.remove(result)
+        }
+
+
         historyTracks.add(0, track)
         interactor.writeHistory(historyTracks)
         _state.postValue(SearchState.History(historyTracks))
@@ -90,12 +100,13 @@ class SearchViewModel(
     }
 
     fun openTrack(track: Track) {
-        if (historyTracks.contains(track)) {
-            historyTracks.remove(track)
-            historyTracks.add(0, track)
-        } else {
-            historyTracks.add(0, track)
+        val result = historyTracks.firstOrNull { historyTrack ->
+            historyTrack.trackId == track.trackId
         }
+        if (result != null) {
+            historyTracks.remove(result)
+        }
+        historyTracks.add(0, track)
         if (historyTracks.size == 11) {
             historyTracks.removeAt(10)
         }

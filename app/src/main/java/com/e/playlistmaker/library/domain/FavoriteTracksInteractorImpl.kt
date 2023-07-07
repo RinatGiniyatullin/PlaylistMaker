@@ -2,9 +2,7 @@ package com.e.playlistmaker.library.domain
 
 import com.e.playlistmaker.search.domain.Track
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import java.util.Collections
 
 class FavoriteTracksInteractorImpl(private val repository: FavoriteTracksRepository) :
     FavoriteTracksInteractor {
@@ -16,8 +14,8 @@ class FavoriteTracksInteractorImpl(private val repository: FavoriteTracksReposit
         repository.deleteFromFavorite(track)
     }
 
-    override fun getFavoriteTracks(): Flow<List<Track>> = flow {
-        repository.getFavoriteTracks().map { list -> Collections.reverse(list) }
+    override suspend fun getFavoriteTracks(): Flow<List<Track>> {
+        return repository.getFavoriteTracks()
+            .map { list -> list.reversed() }
     }
-
 }

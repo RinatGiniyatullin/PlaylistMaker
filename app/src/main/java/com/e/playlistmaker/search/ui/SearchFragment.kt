@@ -88,6 +88,11 @@ class SearchFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
+        // нажатие на трек
+        adapter.itemClickListener =
+            { track ->
+                onTrackClickDebounce(track)
+            }
 
         onTrackClickDebounce = debounce<Track>(
             CLICK_DEBOUNCE_DELAY,
@@ -98,10 +103,10 @@ class SearchFragment : Fragment() {
             viewModel.openTrack(track)
         }
 
-        // нажатие на трек
-        adapter.itemClickListener =
+        // нажатие на историю
+        adapterForHistory.itemClickListener =
             { track ->
-                onTrackClickDebounce(track)
+                onHistoryTrackClickDebounce(track)
             }
 
         onHistoryTrackClickDebounce = debounce<Track>(
@@ -112,12 +117,6 @@ class SearchFragment : Fragment() {
             openTrack(track.trackId)
             viewModel.openHistoryTrack(track)
         }
-
-        // нажатие на историю
-        adapterForHistory.itemClickListener =
-            { track ->
-                onHistoryTrackClickDebounce(track)
-            }
 
         // Очистка истории
         binding.buttonHistory.setOnClickListener {

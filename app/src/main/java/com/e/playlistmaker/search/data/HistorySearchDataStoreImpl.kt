@@ -11,7 +11,10 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-class HistorySearchDataStoreImpl(private val sharedPreferences: SharedPreferences, private val database: AppDatabase) :
+class HistorySearchDataStoreImpl(
+    private val sharedPreferences: SharedPreferences,
+    private val database: AppDatabase,
+) :
     HistorySearchDataStore {
     private val TRACK_KEY = "Track_key"
 
@@ -25,10 +28,11 @@ class HistorySearchDataStoreImpl(private val sharedPreferences: SharedPreference
         val json = sharedPreferences.getString(TRACK_KEY, null)
         val historyTracks = Gson().fromJson(json, Array<Track>::class.java).toList()
         val idFavoriteTracks = database.trackDao().getIdFavoriteTracks()
-        for (i in historyTracks) {
-            for (j in idFavoriteTracks) {
-                if (i.trackId.equals(j)){
-                    i.isFavorite = true
+
+        historyTracks.forEach { track ->
+            idFavoriteTracks.forEach { id ->
+                if (track.trackId == id) {
+                    track.isFavorite = true
                 }
             }
         }

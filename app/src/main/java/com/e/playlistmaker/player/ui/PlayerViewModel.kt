@@ -11,7 +11,6 @@ import com.e.playlistmaker.player.ui.DateTimeFormatter.PROGRESS_FORMAT
 import com.e.playlistmaker.search.domain.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -30,8 +29,8 @@ class PlayerViewModel(
     private var _playButtonStateLiveData = MutableLiveData<ButtonState>()
     val playButtonStateLiveData: LiveData<ButtonState> = _playButtonStateLiveData
 
-    private var _likeButtonStateLiveData = MutableLiveData<ButtonState>()
-    val likeButtonStateLiveData: LiveData<ButtonState> = _likeButtonStateLiveData
+    private var _likeButtonStateLiveData = MutableLiveData<LikeButtonState>()
+    val likeButtonStateLiveData: LiveData<LikeButtonState> = _likeButtonStateLiveData
 
     private var _timeLiveData = MutableLiveData<String>()
     val timeLiveData: LiveData<String> = _timeLiveData
@@ -73,17 +72,19 @@ class PlayerViewModel(
 
     fun loadTrack(trackId: String) {
         viewModelScope.launch {
-          interactor.loadTrack(trackId).collect{_showTrackLiveData.postValue(it)}
+            val track = interactor.loadTrack(trackId)
+            _showTrackLiveData.postValue(track)
+        }
     }
-}
 
     fun playTrack(trackId: String) {
         when (interactor.getPlayerState()) {
             PlayerState.STATE_PLAYING -> pausePlayer()
             else -> {
-                viewModelScope.launch { interactor.loadTrack(trackId).collect{startPlayer(it.previewUrl)} }
-               /* val track = interactor.loadTrack(trackId)!!
-                startPlayer(track.previewUrl)*/
+                viewModelScope.launch {
+                    val track = interactor.loadTrack(trackId)
+                    startPlayer(track.previewUrl)
+                }
             }
         }
     }
@@ -92,14 +93,18 @@ class PlayerViewModel(
         pausePlayer()
     }
 
-    fun onFavoriteClicked(track: Track) {
+    fun onFavoriteClicked(trackId: String) {
         viewModelScope.launch {
-            if (track.isFavorite == false) {
-                _likeButtonStateLiveData.postValue(ButtonState.Like)
+            val track = interactor.loadTrack(trackId)
+
+            if (!track.isFavorite) {
                 favoriteInteractor.addToFavorite(track)
+                track.isFavorite = true
+                _likeButtonStateLiveData.postValue(LikeButtonState.Like)
             } else {
-                _likeButtonStateLiveData.postValue(ButtonState.DisLike)
                 favoriteInteractor.deleteFromFavorite(track)
+                track.isFavorite = false
+                _likeButtonStateLiveData.postValue(LikeButtonState.DisLike)
             }
         }
     }

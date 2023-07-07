@@ -8,9 +8,9 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.e.playlistmaker.App.Companion.TRACK
 import com.e.playlistmaker.R
 import com.e.playlistmaker.databinding.ActivityAudioPlayerBinding
-import com.e.playlistmaker.library.ui.favoriteTracks.FavoriteState
-import com.e.playlistmaker.library.ui.favoriteTracks.FavoriteTracksViewModel
 import com.e.playlistmaker.player.ui.DateTimeFormatter.PROGRESS_FORMAT
+import com.e.playlistmaker.search.domain.Track
+import com.e.playlistmaker.search.ui.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -19,6 +19,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAudioPlayerBinding
     private val viewModel by viewModel<PlayerViewModel>()
+    private val searchViewModel by viewModel<SearchViewModel>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,10 +46,7 @@ class AudioPlayerActivity : AppCompatActivity() {
             ) showReleaseDateText(track.getReleaseDateOnlyYear())
             if (track.primaryGenreName.isNotEmpty()) showGenreNameText(track.primaryGenreName)
             if (track.country.isNotEmpty()) showCountryText(track.country)
-
-            binding.likeButton.setOnClickListener {
-                viewModel.onFavoriteClicked(track)
-            }
+            showLikeButtonState(track)
         }
 
         viewModel.timeLiveData.observe(this) { currentTime ->
@@ -56,11 +54,15 @@ class AudioPlayerActivity : AppCompatActivity() {
         }
 
         viewModel.playButtonStateLiveData.observe(this) { state ->
-            setImageButton(state.imageButton)
+            setImagePlayButton(state.imageButton)
         }
 
         viewModel.likeButtonStateLiveData.observe(this) { state ->
-            setImageButton(state.imageButton)
+            setImageLikeButton(state.imageButton)
+        }
+
+        searchViewModel.likeState.observe(this) { state ->
+            setImageLikeButton(state.imageButton)
         }
 
         viewModel.loadTrack(trackId)
@@ -71,6 +73,18 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         binding.buttonBack.setOnClickListener {
             finish()
+        }
+
+        binding.likeButton.setOnClickListener {
+            viewModel.onFavoriteClicked(trackId)
+        }
+    }
+
+    private fun showLikeButtonState(track: Track) {
+        if (track.isFavorite) {
+            binding.likeButton.setImageResource(R.drawable.like_ok)
+        } else {
+            binding.likeButton.setImageResource(R.drawable.like)
         }
     }
 
@@ -120,9 +134,12 @@ class AudioPlayerActivity : AppCompatActivity() {
         binding.countryValue.text = countryText
     }
 
-    private fun setImageButton(image: Int) {
+    private fun setImagePlayButton(image: Int) {
         binding.playButton.setImageResource(image)
-        binding.likeButton.setImageResource(image)
+    }
+
+    private fun setImageLikeButton(imageButton: Int) {
+        binding.likeButton.setImageResource(imageButton)
     }
 
     private fun updateProgressTime(currentTime: String) {

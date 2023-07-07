@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 class FavoriteTracksViewModel(private val favoriteInteractor: FavoriteTracksInteractor) :
     ViewModel() {
 
+
     private var _favoriteLiveData = MutableLiveData<FavoriteState>()
     val favoriteLiveData: LiveData<FavoriteState> = _favoriteLiveData
 

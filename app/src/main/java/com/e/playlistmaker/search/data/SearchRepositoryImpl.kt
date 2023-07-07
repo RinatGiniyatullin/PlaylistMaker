@@ -11,7 +11,8 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-class SearchRepositoryImpl(private val api: ITunesApi, private val database: AppDatabase) : SearchRepository {
+class SearchRepositoryImpl(private val api: ITunesApi, private val database: AppDatabase) :
+    SearchRepository {
 
     override suspend fun loadTracks(query: String): Flow<List<Track>> = flow {
 
@@ -23,10 +24,10 @@ class SearchRepositoryImpl(private val api: ITunesApi, private val database: App
                 response.results.map { mapTrack(it) }.filter { track ->
                     track.previewUrl != null
                 }
-            for (i in tracks) {
-                for (j in idFavoriteTracks) {
-                    if (i.trackId.equals(j)){
-                        i.isFavorite = true
+            tracks.forEach { track ->
+                idFavoriteTracks.forEach { id ->
+                    if (track.trackId == id) {
+                        track.isFavorite = true
                     }
                 }
             }
