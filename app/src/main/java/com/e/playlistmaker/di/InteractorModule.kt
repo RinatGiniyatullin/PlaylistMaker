@@ -1,5 +1,7 @@
 package com.e.playlistmaker.di
 
+import com.e.playlistmaker.library.domain.FavoriteTracksInteractor
+import com.e.playlistmaker.library.domain.FavoriteTracksInteractorImpl
 import com.e.playlistmaker.player.domain.PlayerInteractor
 import com.e.playlistmaker.player.domain.PlayerInteractorImpl
 import com.e.playlistmaker.search.domain.SearchInteractor
@@ -21,4 +23,7 @@ val interactorModule = module {
     singleOf(::SettingsInteractorImpl).bind<SettingsInteractor>()
 
     singleOf(::SharingInteractorImpl).bind<SharingInteractor>()
+
+    singleOf(::FavoriteTracksInteractorImpl).bind<FavoriteTracksInteractor>()
+
 }

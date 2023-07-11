@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface SearchInteractor {
     fun clearHistory()
-    fun getHistory(): List<Track>
+    fun getHistory(): Flow<List<Track>>
     suspend fun loadTracks(query: String): Flow<List<Track>>
     fun writeHistory(historyTracks: List<Track>)
 }

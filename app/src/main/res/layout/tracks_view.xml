@@ -2,6 +2,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
@@ -12,7 +13,8 @@
         android:layout_height="@dimen/icon_size"
         android:layout_gravity="center_vertical"
         android:layout_marginVertical="@dimen/margin_small"
-        android:layout_marginStart="@dimen/icon_start" />
+        android:layout_marginStart="@dimen/icon_start"
+        tools:src="@tools:sample/backgrounds/scenic" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -27,10 +29,10 @@
             android:id="@+id/trackName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/download"
             android:textColor="?attr/colorSecondary"
             android:textFontWeight="400"
-            android:textSize="@dimen/text_small" />
+            android:textSize="@dimen/text_small"
+            tools:text="@tools:sample/cities" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -42,10 +44,10 @@
                 android:id="@+id/artistName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/download"
                 android:textColor="?attr/colorOnSecondary"
                 android:textFontWeight="400"
-                android:textSize="@dimen/text_s_small" />
+                android:textSize="@dimen/text_s_small"
+                tools:text="@tools:sample/cities" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -59,10 +61,10 @@
                 android:id="@+id/trackTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/download"
                 android:textColor="?attr/colorOnSecondary"
                 android:textFontWeight="400"
-                android:textSize="@dimen/text_s_small" />
+                android:textSize="@dimen/text_s_small"
+                tools:text="@tools:sample/cities" />
 
         </LinearLayout>
 

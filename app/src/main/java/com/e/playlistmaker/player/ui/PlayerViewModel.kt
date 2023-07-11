@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.e.playlistmaker.library.domain.FavoriteTracksInteractor
 import com.e.playlistmaker.player.domain.PlayerInteractor
 import com.e.playlistmaker.player.domain.PlayerState
 import com.e.playlistmaker.player.ui.DateTimeFormatter.PROGRESS_FORMAT
@@ -14,7 +15,10 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PlayerViewModel(private val interactor: PlayerInteractor) :
+class PlayerViewModel(
+    private val interactor: PlayerInteractor,
+    private val favoriteInteractor: FavoriteTracksInteractor,
+) :
     ViewModel() {
 
     private var timerJob: Job? = null
@@ -22,8 +26,11 @@ class PlayerViewModel(private val interactor: PlayerInteractor) :
     private var _showTrackLiveData = MutableLiveData<Track>()
     val showTrackLiveData: LiveData<Track> = _showTrackLiveData
 
-    private var _buttonStateLiveData = MutableLiveData<ButtonState>()
-    val buttonStateLiveData: LiveData<ButtonState> = _buttonStateLiveData
+    private var _playButtonStateLiveData = MutableLiveData<ButtonState>()
+    val playButtonStateLiveData: LiveData<ButtonState> = _playButtonStateLiveData
+
+    private var _likeButtonStateLiveData = MutableLiveData<LikeButtonState>()
+    val likeButtonStateLiveData: LiveData<LikeButtonState> = _likeButtonStateLiveData
 
     private var _timeLiveData = MutableLiveData<String>()
     val timeLiveData: LiveData<String> = _timeLiveData
@@ -34,7 +41,7 @@ class PlayerViewModel(private val interactor: PlayerInteractor) :
     }
 
     private fun startPlayer(previewUrl: String) {
-        _buttonStateLiveData.postValue(ButtonState.Pause)
+        _playButtonStateLiveData.postValue(ButtonState.Pause)
         interactor.playTrack(previewUrl)
         startTimer()
 
@@ -48,7 +55,7 @@ class PlayerViewModel(private val interactor: PlayerInteractor) :
             }
             if (interactor.getPlayerState() == PlayerState.STATE_PREPARED) {
                 _timeLiveData.postValue(getFormat(START_TIME))
-                _buttonStateLiveData.postValue(ButtonState.Play)
+                _playButtonStateLiveData.postValue(ButtonState.Play)
             }
         }
     }
@@ -60,26 +67,46 @@ class PlayerViewModel(private val interactor: PlayerInteractor) :
     private fun pausePlayer() {
         interactor.pauseTrack()
         timerJob?.cancel()
-        _buttonStateLiveData.postValue(ButtonState.Play)
+        _playButtonStateLiveData.postValue(ButtonState.Play)
     }
 
     fun loadTrack(trackId: String) {
-        val track = interactor.loadTrack(trackId)!!
-        _showTrackLiveData.postValue(track)
+        viewModelScope.launch {
+            val track = interactor.loadTrack(trackId)
+            _showTrackLiveData.postValue(track)
+        }
     }
 
     fun playTrack(trackId: String) {
         when (interactor.getPlayerState()) {
             PlayerState.STATE_PLAYING -> pausePlayer()
             else -> {
-                val track = interactor.loadTrack(trackId)!!
-                startPlayer(track.previewUrl)
+                viewModelScope.launch {
+                    val track = interactor.loadTrack(trackId)
+                    startPlayer(track.previewUrl)
+                }
             }
         }
     }
 
     fun pause() {
         pausePlayer()
+    }
+
+    fun onFavoriteClicked(trackId: String) {
+        viewModelScope.launch {
+            val track = interactor.loadTrack(trackId)
+
+            if (!track.isFavorite) {
+                favoriteInteractor.addToFavorite(track)
+                track.isFavorite = true
+                _likeButtonStateLiveData.postValue(LikeButtonState.Like)
+            } else {
+                favoriteInteractor.deleteFromFavorite(track)
+                track.isFavorite = false
+                _likeButtonStateLiveData.postValue(LikeButtonState.DisLike)
+            }
+        }
     }
 
     companion object {

@@ -1,5 +1,6 @@
 package com.e.playlistmaker.search.data
 
+import com.e.playlistmaker.library.data.db.AppDatabase
 import com.e.playlistmaker.search.data.dto.TrackDto
 import com.e.playlistmaker.search.data.network.ITunesApi
 import com.e.playlistmaker.search.domain.Track
@@ -10,17 +11,26 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-class SearchRepositoryImpl(private val api: ITunesApi) : SearchRepository {
+class SearchRepositoryImpl(private val api: ITunesApi, private val database: AppDatabase) :
+    SearchRepository {
 
     override suspend fun loadTracks(query: String): Flow<List<Track>> = flow {
 
         val response = api.search(query)
 
         response.apply {
+            val idFavoriteTracks = database.trackDao().getIdFavoriteTracks()
             val tracks =
                 response.results.map { mapTrack(it) }.filter { track ->
                     track.previewUrl != null
                 }
+            tracks.forEach { track ->
+                idFavoriteTracks.forEach { id ->
+                    if (track.trackId == id) {
+                        track.isFavorite = true
+                    }
+                }
+            }
             emit(tracks)
         }
     }.flowOn(Dispatchers.IO).catch { throw IllegalStateException() }

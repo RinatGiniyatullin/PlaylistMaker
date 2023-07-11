@@ -2,7 +2,9 @@ package com.e.playlistmaker.di
 
 import android.content.Context
 import android.media.MediaPlayer
+import androidx.room.Room
 import com.e.playlistmaker.App.Companion.PREFERENCES
+import com.e.playlistmaker.library.data.db.AppDatabase
 import com.e.playlistmaker.player.data.PlayerImpl
 import com.e.playlistmaker.player.domain.Player
 import com.e.playlistmaker.search.data.HistorySearchDataStoreImpl
@@ -44,5 +46,8 @@ val dataModule = module {
         ExternalNavigatorImpl(androidContext())
     }
 
+    single {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db").build()
+    }
 
 }

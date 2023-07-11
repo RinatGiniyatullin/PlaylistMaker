@@ -4,7 +4,7 @@ import com.e.playlistmaker.search.domain.Track
 
 interface PlayerInteractor {
 
-    fun loadTrack(trackId: String): Track?
+    suspend fun loadTrack(trackId: String): Track
     fun playTrack(previewUrl:String)
     fun pauseTrack()
     fun getPlayerState(): PlayerState
