@@ -1,16 +1,16 @@
 package com.e.playlistmaker.library.ui.favoriteTracks
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.e.playlistmaker.App
+import com.e.playlistmaker.R
 import com.e.playlistmaker.databinding.FragmentFavoriteTracksBinding
-import com.e.playlistmaker.player.ui.AudioPlayerActivity
+import com.e.playlistmaker.player.ui.AudioPlayerFragment
 import com.e.playlistmaker.search.domain.Track
 import com.e.playlistmaker.search.ui.TrackAdapter
 import debounce
@@ -53,7 +53,6 @@ class FavoriteTracksFragment : Fragment() {
                 FavoriteState.Empty -> showEmptyResult()
                 is FavoriteState.FavoriteTracks -> showFavoriteTracks(state.tracks)
             }
-
         }
 
         adapter.itemClickListener =
@@ -90,9 +89,9 @@ class FavoriteTracksFragment : Fragment() {
     }
 
     private fun openTrack(trackId: String) {
-
-        val playerIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
-        playerIntent.putExtra(App.TRACK, trackId)
-        startActivity(playerIntent)
+        findNavController().navigate(
+            R.id.action_libraryFragment_to_audioPlayerFragment,
+            AudioPlayerFragment.createArgs(trackId)
+        )
     }
 }

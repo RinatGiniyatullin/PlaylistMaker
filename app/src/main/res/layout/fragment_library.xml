@@ -4,32 +4,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="?attr/colorSecondaryVariant"
+    android:background="?attr/white_to_black_color"
     android:orientation="vertical"
     tools:context=".library.ui.LibraryFragment">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_start_for_page_title"
-        android:layout_marginTop="@dimen/margin_top_for_page_title"
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_marginTop="@dimen/margin_14"
         android:fontFamily="@font/ys_display_medium"
         android:text="@string/library_name"
-        android:textColor="?attr/colorSecondary"
+        android:textColor="?attr/black_to_white_color"
         android:textFontWeight="500"
-        android:textSize="@dimen/text_normal" />
+        android:textSize="@dimen/text_22" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/padding_large"
-        android:background="?attr/colorSecondaryVariant"
-        app:tabIndicatorColor="?attr/colorSecondary"
+        android:layout_margin="@dimen/margin_16"
+        android:background="?attr/white_to_black_color"
+        app:tabIndicatorColor="?attr/black_to_white_color"
         app:tabIndicatorFullWidth="true"
         app:tabMode="fixed"
         app:tabTextAppearance="@style/TextForLibraryTab"
-        app:tabTextColor="?attr/colorSecondary" />
+        app:tabTextColor="?attr/black_to_white_color" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"

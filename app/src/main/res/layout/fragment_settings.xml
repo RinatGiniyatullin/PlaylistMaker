@@ -4,20 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="?attr/colorSecondaryVariant"
+    android:background="?attr/white_to_black_color"
     android:orientation="vertical"
     tools:context=".settings.ui.SettingsFragment">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_start_for_page_title"
-        android:layout_marginTop="@dimen/margin_top_for_page_title"
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_marginTop="@dimen/margin_14"
         android:fontFamily="@font/ys_display_medium"
         android:text="@string/settings"
-        android:textColor="?attr/colorSecondary"
+        android:textColor="?attr/black_to_white_color"
         android:textFontWeight="500"
-        android:textSize="@dimen/text_normal" />
+        android:textSize="@dimen/text_22" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/theme_switcher"
@@ -25,18 +25,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:layout_marginHorizontal="@dimen/padding_large"
+        android:layout_marginHorizontal="@dimen/margin_16"
         android:layout_marginTop="40dp"
-        android:height="@dimen/height_for_settings"
+        android:height="@dimen/margin_61"
         android:text="@string/dark_theme"
        android:theme="@style/SwitchTheme"
 
        />
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/height_for_settings"
-        android:paddingStart="@dimen/padding_large"
-        android:paddingEnd="@dimen/padding_large">
+        android:layout_height="@dimen/margin_61"
+        android:paddingStart="@dimen/margin_16"
+        android:paddingEnd="@dimen/margin_16">
 
         <TextView
             android:id="@+id/share_app"
@@ -51,9 +51,9 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/height_for_settings"
-        android:paddingStart="@dimen/padding_large"
-        android:paddingEnd="@dimen/padding_large">
+        android:layout_height="@dimen/margin_61"
+        android:paddingStart="@dimen/margin_16"
+        android:paddingEnd="@dimen/margin_16">
 
         <TextView
             android:id="@+id/write_in_support"
@@ -68,9 +68,9 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/height_for_settings"
-        android:paddingStart="@dimen/padding_large"
-        android:paddingEnd="@dimen/padding_large">
+        android:layout_height="@dimen/margin_61"
+        android:paddingStart="@dimen/margin_16"
+        android:paddingEnd="@dimen/margin_16">
 
         <TextView
             android:id="@+id/user_agreement"

@@ -8,6 +8,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import com.e.playlistmaker.di.repositoryModule
 import com.e.playlistmaker.di.viewModelModule
+import com.markodevcic.peko.PermissionRequester
 
 class App : Application() {
 
@@ -22,6 +23,8 @@ class App : Application() {
         val sharedPrefs = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
         val darkTheme = sharedPrefs.getBoolean(DARK_THEME_KEY, false)
         switchTheme(darkTheme)
+
+        PermissionRequester.initialize(applicationContext)
     }
 
     private fun switchTheme(darkThemeEnabled: Boolean) {

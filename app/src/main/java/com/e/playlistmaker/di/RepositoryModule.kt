@@ -2,6 +2,8 @@ package com.e.playlistmaker.di
 
 import com.e.playlistmaker.library.data.db.FavoriteTracksRepositoryImpl
 import com.e.playlistmaker.library.domain.FavoriteTracksRepository
+import com.e.playlistmaker.library.domain.PlaylistRepository
+import com.e.playlistmaker.library.data.db.PlaylistRepositoryImpl
 import com.e.playlistmaker.search.data.SearchRepositoryImpl
 import com.e.playlistmaker.search.domain.SearchRepository
 import com.e.playlistmaker.settings.data.SettingsRepositoryImpl
@@ -17,5 +19,7 @@ val repositoryModule = module {
     singleOf(::SettingsRepositoryImpl).bind<SettingsRepository>()
 
     singleOf(::FavoriteTracksRepositoryImpl).bind<FavoriteTracksRepository>()
+
+    singleOf(::PlaylistRepositoryImpl).bind<PlaylistRepository>()
 
 }

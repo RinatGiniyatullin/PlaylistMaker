@@ -5,9 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import com.e.playlistmaker.R
 import com.e.playlistmaker.databinding.FragmentPlaylistBinding
+import com.e.playlistmaker.library.domain.Playlist
+import com.e.playlistmaker.library.ui.newPlaylist.NewPlaylistViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 
 class PlaylistFragment : Fragment() {
 
@@ -19,9 +23,10 @@ class PlaylistFragment : Fragment() {
         }
     }
 
-    private val playlistViewModel: PlaylistViewModel by viewModel {
-        parametersOf()
-    }
+    private val adapter = PlaylistAdapter()
+
+    private val playlistViewModel by viewModel<PlaylistViewModel>()
+    private val newPlaylistViewModel by viewModel<NewPlaylistViewModel>()
 
     private var _binding: FragmentPlaylistBinding? = null
     private val binding get() = _binding!!
@@ -37,9 +42,37 @@ class PlaylistFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        playlistViewModel.liveData.observe(viewLifecycleOwner) {
+        binding.newPlaylist.setOnClickListener { findNavController().navigate(R.id.action_libraryFragment_to_newPlaylistFragment) }
 
+        binding.recyclerView.layoutManager = GridLayoutManager(requireActivity(), 2)
+        binding.recyclerView.adapter = adapter
+
+        playlistViewModel.showPlaylist()
+        playlistViewModel.state.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                PlaylistState.Empty -> showEmptyResult()
+                is PlaylistState.Playlists -> showPlaylists(state.playlists)
+            }
         }
+
+        newPlaylistViewModel.playlistLiveData.observe(viewLifecycleOwner) { playlist ->
+            adapter.playlists.clear()
+            adapter.playlists.addAll(playlist)
+            adapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun showPlaylists(playlists: List<Playlist>) {
+        binding.recyclerView.visibility = View.VISIBLE
+        binding.containerForEmptyPlaylists.visibility = View.GONE
+        adapter.playlists.clear()
+        adapter.playlists.addAll(playlists)
+        adapter.notifyDataSetChanged()
+    }
+
+    private fun showEmptyResult() {
+        binding.recyclerView.visibility = View.GONE
+        binding.containerForEmptyPlaylists.visibility = View.VISIBLE
     }
 
     override fun onDestroyView() {
