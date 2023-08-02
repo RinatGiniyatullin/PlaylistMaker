@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.e.playlistmaker.library.domain.Playlist
-import com.e.playlistmaker.library.domain.PlaylistInteractor
+import com.e.playlistmaker.library.domain.playlist.PlaylistInteractor
 import kotlinx.coroutines.launch
 
 class PlaylistViewModel(private val interactor: PlaylistInteractor) : ViewModel() {
@@ -18,7 +18,6 @@ class PlaylistViewModel(private val interactor: PlaylistInteractor) : ViewModel(
         viewModelScope.launch {
             interactor.getPlaylists()
                 .collect { positiveResult(it) }
-
         }
     }
 

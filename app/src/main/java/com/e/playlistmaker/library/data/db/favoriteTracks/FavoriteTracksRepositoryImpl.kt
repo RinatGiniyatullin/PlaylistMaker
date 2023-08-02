@@ -1,7 +1,8 @@
-package com.e.playlistmaker.library.data.db
+package com.e.playlistmaker.library.data.db.favoriteTracks
 
+import com.e.playlistmaker.library.data.db.AppDatabase
 import com.e.playlistmaker.library.data.db.entity.TrackEntity
-import com.e.playlistmaker.library.domain.FavoriteTracksRepository
+import com.e.playlistmaker.library.domain.favoriteTracks.FavoriteTracksRepository
 import com.e.playlistmaker.search.domain.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

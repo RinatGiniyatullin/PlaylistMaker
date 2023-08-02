@@ -1,6 +1,7 @@
 package com.e.playlistmaker
 
 import android.app.Application
+import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import com.e.playlistmaker.di.dataModule
 import com.e.playlistmaker.di.interactorModule
@@ -14,6 +15,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        appContext = applicationContext
 
         startKoin {
             androidContext(this@App)
@@ -41,5 +43,6 @@ class App : Application() {
         const val PREFERENCES = "Preferences"
         const val DARK_THEME_KEY = "Dark_theme_key"
         const val TRACK = "Track"
+        lateinit var appContext: Context
     }
 }

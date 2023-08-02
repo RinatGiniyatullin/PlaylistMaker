@@ -1,10 +1,11 @@
-package com.e.playlistmaker.library.data.db
+package com.e.playlistmaker.library.data.db.playlist
 
+import com.e.playlistmaker.library.data.db.AppDatabase
 import com.e.playlistmaker.library.data.db.entity.PlaylistEntity
 import com.e.playlistmaker.library.data.db.entity.TrackEntity
 import com.e.playlistmaker.library.data.db.entity.TrackForPlaylistEntity
 import com.e.playlistmaker.library.domain.Playlist
-import com.e.playlistmaker.library.domain.PlaylistRepository
+import com.e.playlistmaker.library.domain.playlist.PlaylistRepository
 import com.e.playlistmaker.search.domain.Track
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -18,16 +19,12 @@ class PlaylistRepositoryImpl(private val database: AppDatabase) : PlaylistReposi
     }
 
     override suspend fun addNewTrack(track: Track, playlist: Playlist) {
-        //обновить список ид трэков плейлиста
         playlist.tracksId.add(track.trackId)
 
-        //увеличить счётчик количества треков
         playlist.numberOfTracks += 1
 
-        //обновить запись изменённого плейлиста в базе данных
         database.playlistDao().updatePlaylist(mapToEntityPlaylist(playlist))
 
-        //добавляем трек в БД для плейлистов
         database.tracksForPlaylistDao().insertTrackInPlaylist(mapToEntityTracks(track))
 
     }
@@ -42,7 +39,7 @@ class PlaylistRepositoryImpl(private val database: AppDatabase) : PlaylistReposi
             playlistId = playlist.playlistId,
             title = playlist.title,
             description = playlist.description,
-            uriForImage = playlist.uriForImage.toString(),
+            uriForImage = playlist.uriForImage,
             tracksId = createStringFromList(playlist.tracksId),
             numberOfTracks = playlist.numberOfTracks
         )

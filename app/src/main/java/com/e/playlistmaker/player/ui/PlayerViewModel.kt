@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.e.playlistmaker.library.domain.FavoriteTracksInteractor
+import com.e.playlistmaker.library.domain.favoriteTracks.FavoriteTracksInteractor
 import com.e.playlistmaker.library.domain.Playlist
-import com.e.playlistmaker.library.domain.PlaylistInteractor
+import com.e.playlistmaker.library.domain.playlist.PlaylistInteractor
 import com.e.playlistmaker.player.domain.PlayerInteractor
 import com.e.playlistmaker.player.domain.PlayerState
 import com.e.playlistmaker.player.ui.DateTimeFormatter.PROGRESS_FORMAT

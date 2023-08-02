@@ -92,4 +92,11 @@
         <item name="trackTint">@color/light_gray</item>
     </style>
 
+    <style name="InputStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/empty_stroke_color</item>
+        <item name="hintTextColor">@color/empty_stroke_color</item>
+
+    </style>
+
+
 </resources>

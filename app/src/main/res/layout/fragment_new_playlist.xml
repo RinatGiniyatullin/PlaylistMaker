@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".library.ui.newPlaylist.NewPlaylistFragment">
 
     <androidx.constraintlayout.widget.Guideline
@@ -147,69 +148,60 @@
         app:layout_constraintStart_toStartOf="@id/left24"
         app:layout_constraintTop_toTopOf="@id/topImage" />
 
-    <EditText
-        android:id="@+id/title"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/titleInputLayout"
+        style="@style/InputStyle"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/rectangle_edit_text_gray"
-        android:fontFamily="@font/ys_display_regular"
-        android:hint="@string/title"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingStart="@dimen/margin_16"
+        android:layout_height="wrap_content"
         android:textColorHint="?attr/black_to_white_color"
-        android:textSize="@dimen/text_16"
-        app:layout_constraintBottom_toBottomOf="@id/bottomTitle"
+        app:boxStrokeWidth="1dp"
+        app:boxStrokeWidthFocused="1dp"
         app:layout_constraintEnd_toEndOf="@id/right16"
         app:layout_constraintStart_toStartOf="@id/left16"
-        app:layout_constraintTop_toTopOf="@id/topTitle" />
+        app:layout_constraintTop_toTopOf="@id/topTitle">
 
-    <TextView
-        android:id="@+id/title_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_13"
-        android:background="@drawable/background_fot_text"
-        android:fontFamily="@font/ys_display_regular"
-        android:padding="@dimen/margin_3"
-        android:text="@string/title"
-        android:textColor="@color/blue"
-        android:textSize="@dimen/text_12"
-        app:layout_constraintBottom_toBottomOf="@id/topTitle"
-        app:layout_constraintStart_toStartOf="@id/left16"
-        app:layout_constraintTop_toTopOf="@id/topTitle" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/ys_display_regular"
+            android:hint="@string/title"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingStart="@dimen/margin_16"
+            android:textColor="?attr/black_to_white_color"
+            android:textCursorDrawable="@drawable/cursor"
+            android:textSize="@dimen/text_16" />
 
-    <EditText
-        android:id="@+id/description"
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/descriptionInputLayout"
+        style="@style/InputStyle"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/rectangle_edit_text_gray"
-        android:fontFamily="@font/ys_display_regular"
-        android:hint="@string/description"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingStart="@dimen/margin_16"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_17"
         android:textColorHint="?attr/black_to_white_color"
-        android:textSize="@dimen/text_16"
-        app:layout_constraintBottom_toBottomOf="@id/bottomDescription"
+        app:boxStrokeWidth="1dp"
+        app:boxStrokeWidthFocused="1dp"
         app:layout_constraintEnd_toEndOf="@id/right16"
         app:layout_constraintStart_toStartOf="@id/left16"
-        app:layout_constraintTop_toTopOf="@id/topDescription" />
+        app:layout_constraintTop_toBottomOf="@id/titleInputLayout">
 
-    <TextView
-        android:id="@+id/description_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_13"
-        android:background="@drawable/background_fot_text"
-        android:fontFamily="@font/ys_display_regular"
-        android:padding="@dimen/margin_3"
-        android:text="@string/description"
-        android:textColor="@color/blue"
-        android:textSize="@dimen/text_12"
-        app:layout_constraintBottom_toBottomOf="@id/topDescription"
-        app:layout_constraintStart_toStartOf="@id/left16"
-        app:layout_constraintTop_toTopOf="@id/topDescription" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/ys_display_regular"
+            android:hint="@string/description"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingStart="@dimen/margin_16"
+            android:textColor="?attr/black_to_white_color"
+            android:textCursorDrawable="@drawable/cursor"
+            android:textSize="@dimen/text_16" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/createButton"

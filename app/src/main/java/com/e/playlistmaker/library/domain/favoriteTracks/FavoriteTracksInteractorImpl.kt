@@ -1,4 +1,4 @@
-package com.e.playlistmaker.library.domain
+package com.e.playlistmaker.library.domain.favoriteTracks
 
 import com.e.playlistmaker.search.domain.Track
 import kotlinx.coroutines.flow.Flow
