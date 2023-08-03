@@ -2,6 +2,7 @@ package com.e.playlistmaker.di
 
 import com.e.playlistmaker.library.ui.favoriteTracks.FavoriteTracksViewModel
 import com.e.playlistmaker.library.ui.playlist.PlaylistViewModel
+import com.e.playlistmaker.library.ui.newPlaylist.NewPlaylistViewModel
 import com.e.playlistmaker.player.ui.PlayerViewModel
 import com.e.playlistmaker.search.ui.SearchViewModel
 import com.e.playlistmaker.settings.ui.SettingsViewModel
@@ -15,4 +16,5 @@ val viewModelModule = module {
     viewModelOf(::SettingsViewModel)
     viewModelOf(::FavoriteTracksViewModel)
     viewModelOf(::PlaylistViewModel)
+    viewModelOf(::NewPlaylistViewModel)
 }

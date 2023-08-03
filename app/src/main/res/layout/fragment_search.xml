@@ -4,27 +4,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="?attr/colorSecondaryVariant"
+    android:background="?attr/white_to_black_color"
     android:orientation="vertical"
     tools:context=".search.ui.SearchFragment">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_start_for_page_title"
-        android:layout_marginTop="@dimen/margin_top_for_page_title"
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_marginTop="@dimen/margin_14"
         android:fontFamily="@font/ys_display_medium"
         android:text="@string/search"
-        android:textColor="?attr/colorSecondary"
+        android:textColor="?attr/black_to_white_color"
         android:textFontWeight="500"
-        android:textSize="@dimen/text_normal" />
+        android:textSize="@dimen/text_22" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="36dp"
-        android:layout_marginStart="@dimen/padding_large"
-        android:layout_marginTop="@dimen/margin_l_normal"
-        android:layout_marginEnd="@dimen/padding_large"
+        android:layout_marginStart="@dimen/margin_16"
+        android:layout_marginTop="@dimen/margin_24"
+        android:layout_marginEnd="@dimen/margin_16"
         android:background="@drawable/shape"
         android:orientation="horizontal">
 
@@ -35,7 +35,7 @@
             android:layout_marginStart="13dp"
             android:src="@drawable/search"
             app:iconPadding="10dp"
-            app:tint="?attr/colorContainer" />
+            app:tint="?attr/gray_to_black_color" />
 
         <EditText
             android:id="@+id/inputText"
@@ -46,16 +46,16 @@
             android:layout_marginEnd="9dp"
             android:layout_weight="1"
             android:background="@null"
-            android:color="?attr/colorOnPrimary"
+            android:color="?attr/black_to_black_color"
             android:gravity="center_vertical"
             android:hint="@string/search"
             android:inputType="text"
             android:maxLines="1"
-            android:textColor="?attr/colorOnPrimary"
-            android:textColorHint="?attr/colorContainer"
+            android:textColor="?attr/black_to_black_color"
+            android:textColorHint="?attr/gray_to_black_color"
             android:textCursorDrawable="@drawable/cursor"
             android:textFontWeight="400"
-            android:textSize="@dimen/text_small"
+            android:textSize="@dimen/text_16"
             app:fontFamily="@font/ys_display_regular" />
 
         <ImageView
@@ -63,10 +63,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginEnd="@dimen/margin_large"
+            android:layout_marginEnd="@dimen/margin_14"
             android:src="@drawable/close"
             android:visibility="gone"
-            app:tint="?attr/colorContainer" />
+            app:tint="?attr/gray_to_black_color" />
 
     </LinearLayout>
 
@@ -74,7 +74,7 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/margin_l_normal" />
+        android:layout_marginTop="@dimen/margin_24" />
 
     <LinearLayout
         android:id="@+id/containerForHistory"
@@ -91,7 +91,7 @@
             android:fontFamily="@font/ys_display_medium"
             android:gravity="center"
             android:text="@string/search_history"
-            android:textColor="?attr/colorSecondary"
+            android:textColor="?attr/black_to_white_color"
             android:textFontWeight="500"
             android:textSize="19sp" />
 
@@ -108,7 +108,7 @@
                     android:id="@+id/recyclerHistory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_s_normal" />
+                    android:layout_marginTop="@dimen/margin_20" />
 
                 <Button
                     android:id="@+id/buttonHistory"
@@ -147,10 +147,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/padding_large"
+                android:layout_marginTop="@dimen/margin_16"
                 android:fontFamily="@font/ys_display_medium"
                 android:gravity="center"
-                android:textColor="?attr/colorSecondary"
+                android:textColor="?attr/black_to_white_color"
                 android:textFontWeight="400"
                 android:textSize="19sp" />
 

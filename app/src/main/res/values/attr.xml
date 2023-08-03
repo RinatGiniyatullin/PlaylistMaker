@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="blue_to_black_color" format="reference" />
+    <attr name="white_to_white_color" format="reference" />
+    <attr name="black_to_black_color" format="reference" />
+    <attr name="black_to_white_color" format="reference" />
+    <attr name="white_to_black_color" format="reference" />
+    <attr name="gray_to_white_color" format="reference" />
+    <attr name="light_gray_to_white_color" format="reference" />
+    <attr name="light_gray_to_gray_color" format="reference" />
+    <attr name="gray_to_black_color" format="reference" />
+    <attr name="black25_to_white25_color" format="reference" />
+    <attr name="light_gray_to_blue_color" format="reference" />
+
+</resources>

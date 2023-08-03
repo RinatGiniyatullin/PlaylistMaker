@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".library.ui.newPlaylist.NewPlaylistFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.044" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/right16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.956" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.066" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/right24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.934" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left64"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.177" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottomAppBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.07" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/topImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.102" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottomImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.492" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/topTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.532" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottomTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.6" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/topDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.62" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottomDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.687" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/topButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.905" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bottomButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.96" />
+
+    <TextView
+        android:id="@+id/button_back"
+        android:layout_width="@dimen/margin_16"
+        android:layout_height="@dimen/margin_16"
+        android:drawableStart="@drawable/arrow_back"
+        android:drawableTint="?attr/black_to_white_color"
+        app:layout_constraintBottom_toTopOf="@id/bottomAppBar"
+        app:layout_constraintStart_toStartOf="@id/left16"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ys_display_medium"
+        android:text="@string/new_playlist"
+        android:textColor="?attr/black_to_white_color"
+        android:textFontWeight="500"
+        android:textSize="@dimen/text_22"
+        app:layout_constraintBottom_toTopOf="@id/bottomAppBar"
+        app:layout_constraintStart_toStartOf="@id/left64"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/cover"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/rectangle"
+        app:layout_constraintBottom_toTopOf="@id/bottomImage"
+        app:layout_constraintDimensionRatio="w,1:1"
+        app:layout_constraintEnd_toEndOf="@id/right24"
+        app:layout_constraintStart_toStartOf="@id/left24"
+        app:layout_constraintTop_toTopOf="@id/topImage" />
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/add_photo"
+        app:layout_constraintBottom_toTopOf="@id/bottomImage"
+        app:layout_constraintEnd_toEndOf="@id/right24"
+        app:layout_constraintStart_toStartOf="@id/left24"
+        app:layout_constraintTop_toTopOf="@id/topImage" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/titleInputLayout"
+        style="@style/InputStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColorHint="?attr/black_to_white_color"
+        app:boxStrokeWidth="1dp"
+        app:boxStrokeWidthFocused="1dp"
+        app:layout_constraintEnd_toEndOf="@id/right16"
+        app:layout_constraintStart_toStartOf="@id/left16"
+        app:layout_constraintTop_toTopOf="@id/topTitle">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/ys_display_regular"
+            android:hint="@string/title"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingStart="@dimen/margin_16"
+            android:textColor="?attr/black_to_white_color"
+            android:textCursorDrawable="@drawable/cursor"
+            android:textSize="@dimen/text_16" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/descriptionInputLayout"
+        style="@style/InputStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_17"
+        android:textColorHint="?attr/black_to_white_color"
+        app:boxStrokeWidth="1dp"
+        app:boxStrokeWidthFocused="1dp"
+        app:layout_constraintEnd_toEndOf="@id/right16"
+        app:layout_constraintStart_toStartOf="@id/left16"
+        app:layout_constraintTop_toBottomOf="@id/titleInputLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/ys_display_regular"
+            android:hint="@string/description"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingStart="@dimen/margin_16"
+            android:textColor="?attr/black_to_white_color"
+            android:textCursorDrawable="@drawable/cursor"
+            android:textSize="@dimen/text_16" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/createButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/create_button"
+        android:fontFamily="@font/ys_display_medium"
+        android:text="@string/create"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_16"
+        app:layout_constraintBottom_toBottomOf="@id/bottomButton"
+        app:layout_constraintEnd_toEndOf="@id/right16"
+        app:layout_constraintStart_toStartOf="@id/left16"
+        app:layout_constraintTop_toTopOf="@id/topButton" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

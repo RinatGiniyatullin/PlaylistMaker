@@ -1,21 +1,18 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/blue</item>
-        <item name="colorPrimaryVariant">@color/white</item>
-        <item name="colorOnPrimary">@color/black</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/black</item>
-        <item name="colorSecondaryVariant">@color/white</item>
-        <item name="colorOnSecondary">@color/text_gray</item>
-        <item name="colorOnContainer">@color/light_gray</item>
-        <item name="colorButtonNormal">@color/light_gray</item>
-        <item name="colorContainer">@color/text_gray</item>
-        <item name="colorAccent">@color/black25</item>
-        <item name="colorOnSurface">@color/light_gray</item>
 
-        <!-- Status bar color. -->
-        <!-- Customize your theme here. -->
+        <item name="blue_to_black_color">@color/blue</item>
+        <item name="white_to_white_color">@color/white</item>
+        <item name="black_to_black_color">@color/black</item>
+        <item name="black_to_white_color">@color/black</item>
+        <item name="white_to_black_color">@color/white</item>
+        <item name="gray_to_white_color">@color/text_gray</item>
+        <item name="light_gray_to_white_color">@color/light_gray</item>
+        <item name="light_gray_to_gray_color">@color/light_gray</item>
+        <item name="gray_to_black_color">@color/text_gray</item>
+        <item name="black25_to_white25_color">@color/black25</item>
+        <item name="light_gray_to_blue_color">@color/light_gray</item>
+
     </style>
 </resources>

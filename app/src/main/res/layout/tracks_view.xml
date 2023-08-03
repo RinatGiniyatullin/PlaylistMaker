@@ -9,19 +9,19 @@
 
     <ImageView
         android:id="@+id/trackCover"
-        android:layout_width="@dimen/icon_size"
-        android:layout_height="@dimen/icon_size"
+        android:layout_width="@dimen/margin_45"
+        android:layout_height="@dimen/margin_45"
         android:layout_gravity="center_vertical"
-        android:layout_marginVertical="@dimen/margin_small"
-        android:layout_marginStart="@dimen/icon_start"
+        android:layout_marginVertical="@dimen/margin_8"
+        android:layout_marginStart="@dimen/margin_13"
         tools:src="@tools:sample/backgrounds/scenic" />
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/margin_large"
-        android:layout_marginStart="@dimen/margin_small"
-        android:layout_marginEnd="@dimen/margin_normal"
+        android:layout_marginVertical="@dimen/margin_14"
+        android:layout_marginStart="@dimen/margin_8"
+        android:layout_marginEnd="@dimen/margin_44"
         android:layout_weight="1"
         android:orientation="vertical">
 
@@ -29,41 +29,45 @@
             android:id="@+id/trackName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="?attr/colorSecondary"
+            android:fontFamily="@font/ys_display_regular"
+            android:textColor="?attr/black_to_white_color"
             android:textFontWeight="400"
-            android:textSize="@dimen/text_small"
+            android:textSize="@dimen/text_16"
+
             tools:text="@tools:sample/cities" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_s_small"
+            android:layout_marginTop="@dimen/margin_1"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/artistName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="?attr/colorOnSecondary"
+                android:fontFamily="@font/ys_display_regular"
+                android:textColor="?attr/gray_to_white_color"
                 android:textFontWeight="400"
-                android:textSize="@dimen/text_s_small"
+                android:textSize="@dimen/text_11"
                 tools:text="@tools:sample/cities" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/margin_x_small"
-                android:layout_marginEnd="@dimen/margin_x_small"
+                android:layout_marginStart="@dimen/margin_5"
+                android:layout_marginEnd="@dimen/margin_5"
                 android:src="@drawable/suffix" />
 
             <TextView
                 android:id="@+id/trackTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="?attr/colorOnSecondary"
+                android:fontFamily="@font/ys_display_regular"
+                android:textColor="?attr/gray_to_white_color"
                 android:textFontWeight="400"
-                android:textSize="@dimen/text_s_small"
+                android:textSize="@dimen/text_11"
                 tools:text="@tools:sample/cities" />
 
         </LinearLayout>
@@ -72,7 +76,7 @@
 
     <ImageView
         style="@style/ImageStyle"
-        android:layout_marginEnd="@dimen/margin_s_normal"
+        android:layout_marginEnd="@dimen/margin_20"
         android:src="@drawable/arrow_forward" />
 
 </LinearLayout>

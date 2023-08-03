@@ -31,7 +31,7 @@
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="?attr/colorSecondaryVariant"
+        android:background="?attr/white_to_black_color"
         app:itemIconTint="@color/bnv_tab_item_color"
         app:itemTextAppearanceActive="@style/BNVText"
         app:itemTextAppearanceInactive="@style/BNVText"

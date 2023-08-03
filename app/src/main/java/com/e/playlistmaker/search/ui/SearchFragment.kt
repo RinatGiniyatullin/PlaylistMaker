@@ -1,7 +1,6 @@
 package com.e.playlistmaker.search.ui
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,11 +10,11 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.e.playlistmaker.App
 import com.e.playlistmaker.R
 import com.e.playlistmaker.databinding.FragmentSearchBinding
-import com.e.playlistmaker.player.ui.AudioPlayerActivity
+import com.e.playlistmaker.player.ui.AudioPlayerFragment
 import com.e.playlistmaker.search.domain.Track
 import debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -33,7 +32,6 @@ class SearchFragment : Fragment() {
     private lateinit var onHistoryTrackClickDebounce: (Track) -> Unit
 
     private lateinit var trackSearchDebounce: (String) -> Unit
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -131,10 +129,10 @@ class SearchFragment : Fragment() {
     }
 
     private fun openTrack(trackId: String) {
-
-        val playerIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
-        playerIntent.putExtra(App.TRACK, trackId)
-        startActivity(playerIntent)
+        findNavController().navigate(
+            R.id.action_searchFragment_to_audioPlayerFragment,
+            AudioPlayerFragment.createArgs(trackId)
+        )
     }
 
     private fun showHistory(historyTracks: List<Track>, clearText: Boolean) {

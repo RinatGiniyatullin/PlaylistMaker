@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.e.playlistmaker.library.domain.FavoriteTracksInteractor
+import com.e.playlistmaker.library.domain.favoriteTracks.FavoriteTracksInteractor
+import com.e.playlistmaker.library.domain.Playlist
+import com.e.playlistmaker.library.domain.playlist.PlaylistInteractor
 import com.e.playlistmaker.player.domain.PlayerInteractor
 import com.e.playlistmaker.player.domain.PlayerState
 import com.e.playlistmaker.player.ui.DateTimeFormatter.PROGRESS_FORMAT
@@ -18,6 +20,7 @@ import java.util.Locale
 class PlayerViewModel(
     private val interactor: PlayerInteractor,
     private val favoriteInteractor: FavoriteTracksInteractor,
+    private val playlistInteractor: PlaylistInteractor,
 ) :
     ViewModel() {
 
@@ -34,6 +37,9 @@ class PlayerViewModel(
 
     private var _timeLiveData = MutableLiveData<String>()
     val timeLiveData: LiveData<String> = _timeLiveData
+
+    private var _addTrackLiveData = MutableLiveData<AddResultState>()
+    val addTrackLiveData: LiveData<AddResultState> = _addTrackLiveData
 
     override fun onCleared() {
         super.onCleared()
@@ -106,6 +112,19 @@ class PlayerViewModel(
                 track.isFavorite = false
                 _likeButtonStateLiveData.postValue(LikeButtonState.DisLike)
             }
+        }
+    }
+
+    fun addTrackToPlaylist(trackId: String, playlist: Playlist) {
+
+        if (playlist.tracksId.contains(trackId)) {
+            _addTrackLiveData.postValue(AddResultState.NegativeResult(playlist))
+        } else {
+            viewModelScope.launch {
+                val track = interactor.loadTrack(trackId)
+                playlistInteractor.addNewTrack(track, playlist)
+            }
+            _addTrackLiveData.postValue(AddResultState.PositiveResult(playlist))
         }
     }
 
