@@ -23,8 +23,8 @@ class SearchFragment : Fragment() {
 
     private val viewModel by viewModel<SearchViewModel>()
 
-    private val adapter = TrackAdapter()
-    private val adapterForHistory = TrackAdapter()
+    private val adapter = TrackAdapter(isHightQuality = true)
+    private val adapterForHistory = TrackAdapter(isHightQuality = true)
 
     private lateinit var binding: FragmentSearchBinding
 

@@ -34,7 +34,7 @@ class FavoriteTracksFragment : Fragment() {
 
     private lateinit var onTrackClickDebounce: (Track) -> Unit
 
-    private val adapter = TrackAdapter()
+    private val adapter = TrackAdapter(isHightQuality = true)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

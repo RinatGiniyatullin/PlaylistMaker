@@ -10,25 +10,27 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.e.playlistmaker.R
 import com.e.playlistmaker.databinding.FragmentNewPlaylistBinding
 import com.e.playlistmaker.library.domain.Playlist
-import com.e.playlistmaker.library.ui.playlist.PlaylistViewModel
+import com.e.playlistmaker.library.ui.listPlaylists.ListPlaylistsViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class NewPlaylistFragment : Fragment() {
+open class NewPlaylistFragment : Fragment() {
 
-    private val viewModel by viewModel<NewPlaylistViewModel>()
-    private val playlistViewModel by viewModel<PlaylistViewModel>()
+    open val viewModel by viewModel<NewPlaylistViewModel>()
+    private val listPlaylistsViewModel by viewModel<ListPlaylistsViewModel>()
 
-    private lateinit var binding: FragmentNewPlaylistBinding
+    lateinit var binding: FragmentNewPlaylistBinding
 
     private lateinit var confirmDialog: MaterialAlertDialogBuilder
 
-    private var loadUri: Uri? = null
+    var loadUri: Uri? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -81,7 +83,7 @@ class NewPlaylistFragment : Fragment() {
                 )
             )
 
-            playlistViewModel.showPlaylist()
+            listPlaylistsViewModel.showPlaylist()
 
             Toast.makeText(
                 requireActivity(),
@@ -104,20 +106,28 @@ class NewPlaylistFragment : Fragment() {
 
         viewModel.pictureLiveData.observe(viewLifecycleOwner) { uri ->
             loadUri = uri
-            binding.cover.setImageURI(uri)
+            Glide.with(binding.cover)
+                .load(uri)
+                .placeholder(R.drawable.cover_placeholder)
+                .transform(RoundedCorners(resources.getDimensionPixelSize(R.dimen.margin_8)))
+                .into(binding.cover)
         }
 
         binding.title.doOnTextChanged { text, _, _, _ ->
-            binding.titleInputLayout.inputTextChangeHandler(text)
-            if (text.isNullOrEmpty()) {
-                titleEditTextIsEmpty()
-            } else {
-                titleEditTextIsNotEmpty()
-            }
+            titleDoOnTextChanged(text)
         }
 
         binding.description.doOnTextChanged { text, _, _, _ ->
             binding.descriptionInputLayout.inputTextChangeHandler(text)
+        }
+    }
+
+    fun titleDoOnTextChanged(text: CharSequence?) {
+        binding.titleInputLayout.inputTextChangeHandler(text)
+        if (text.isNullOrEmpty()) {
+            titleEditTextIsEmpty()
+        } else {
+            titleEditTextIsNotEmpty()
         }
     }
 
@@ -144,7 +154,7 @@ class NewPlaylistFragment : Fragment() {
         binding.image.visibility = View.GONE
     }
 
-    private fun checkBeforeExit() {
+    open fun checkBeforeExit() {
         if (binding.title.text!!.isNotEmpty()
             || binding.description.text!!.isNotEmpty()
             || binding.cover.background == null
@@ -155,7 +165,7 @@ class NewPlaylistFragment : Fragment() {
         }
     }
 
-    private fun back() {
+    internal fun back() {
         findNavController().navigateUp()
     }
 

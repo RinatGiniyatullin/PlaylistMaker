@@ -16,8 +16,8 @@ import com.markodevcic.peko.PermissionRequester
 import com.markodevcic.peko.PermissionResult
 import kotlinx.coroutines.launch
 
-class NewPlaylistViewModel(
-    private val interactor: PlaylistInteractor,
+open class NewPlaylistViewModel(
+    internal val interactor: PlaylistInteractor,
     private val newPlaylistInteractor: NewPlaylistInteractor,
 ) : ViewModel() {
     val requester = PermissionRequester.instance()

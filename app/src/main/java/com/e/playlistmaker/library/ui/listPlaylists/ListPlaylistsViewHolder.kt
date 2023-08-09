@@ -1,4 +1,4 @@
-package com.e.playlistmaker.library.ui.playlist
+package com.e.playlistmaker.library.ui.listPlaylists
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -7,7 +7,7 @@ import com.e.playlistmaker.R
 import com.e.playlistmaker.databinding.PlaylistItemBinding
 import com.e.playlistmaker.library.domain.Playlist
 
-class PlaylistViewHolder(private val binding: PlaylistItemBinding) : RecyclerView.ViewHolder(
+class ListPlaylistsViewHolder(private val binding: PlaylistItemBinding) : RecyclerView.ViewHolder(
     binding.root
 ) {
 
@@ -24,13 +24,15 @@ class PlaylistViewHolder(private val binding: PlaylistItemBinding) : RecyclerVie
     }
 
     private fun mapText(numberOfTracks: Int): String {
-        var text = ""
-        when (numberOfTracks % 10) {
-            1 -> text = "$numberOfTracks трек"
-            2, 3, 4 -> text = "$numberOfTracks трека"
-            5, 6, 7, 8, 9, 0 -> text = "$numberOfTracks треков"
+        return when (numberOfTracks) {
+            11, 12, 13, 14, 15, 16, 17, 18, 19 -> "$numberOfTracks треков"
+            else -> when (numberOfTracks % 10) {
+                1 -> "$numberOfTracks трек"
+                2, 3, 4 -> "$numberOfTracks трека"
+                5, 6, 7, 8, 9, 0 -> "$numberOfTracks треков"
+                else -> ""
+            }
         }
-        return text
     }
 }
 

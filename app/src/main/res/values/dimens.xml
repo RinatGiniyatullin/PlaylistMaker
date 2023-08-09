@@ -32,4 +32,11 @@
     <dimen name="margin_30">30dp</dimen>
     <dimen name="margin_28">28dp</dimen>
     <dimen name="margin_250">250dp</dimen>
+    <dimen name="text_24">24sp</dimen>
+    <dimen name="text_18">18sp</dimen>
+    <dimen name="margin_12">12dp</dimen>
+    <dimen name="margin_150">150dp</dimen>
+    <dimen name="margin_37">37dp</dimen>
+    <dimen name="margin_29">29dp</dimen>
+    <dimen name="margin_42">42dp</dimen>
 </resources>
