@@ -27,12 +27,6 @@ import java.util.Locale
 
 class AudioPlayerFragment : Fragment() {
 
-    companion object {
-        const val TRACK_ID = "trackId"
-
-        fun createArgs(trackId: String): Bundle = bundleOf(TRACK_ID to trackId)
-    }
-
     private lateinit var binding: FragmentAudioPlayerBinding
     private val viewModel by viewModel<PlayerViewModel>()
     private val searchViewModel by viewModel<SearchViewModel>()
@@ -263,5 +257,11 @@ class AudioPlayerFragment : Fragment() {
 
     private fun updateProgressTime(currentTime: String) {
         binding.progressTime.text = currentTime
+    }
+
+    companion object {
+        const val TRACK_ID = "trackId"
+
+        fun createArgs(trackId: String): Bundle = bundleOf(TRACK_ID to trackId)
     }
 }

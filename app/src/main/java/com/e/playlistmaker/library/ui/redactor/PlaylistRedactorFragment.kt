@@ -13,16 +13,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class PlaylistRedactorFragment : NewPlaylistFragment() {
     override val viewModel by viewModel<PlaylistRedactorViewModel>()
 
-    companion object {
-        const val COVER = "cover"
-        const val TITLE = "title"
-        const val DESCRIPTION = "description"
-        const val ID = "id"
-
-        fun createArgs(cover: String, title: String, description: String, playlistId: Int): Bundle =
-            bundleOf(COVER to cover, TITLE to title, DESCRIPTION to description, ID to playlistId)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -67,5 +57,15 @@ class PlaylistRedactorFragment : NewPlaylistFragment() {
 
     override fun checkBeforeExit() {
         back()
+    }
+
+    companion object {
+        const val COVER = "cover"
+        const val TITLE = "title"
+        const val DESCRIPTION = "description"
+        const val ID = "id"
+
+        fun createArgs(cover: String, title: String, description: String, playlistId: Int): Bundle =
+            bundleOf(COVER to cover, TITLE to title, DESCRIPTION to description, ID to playlistId)
     }
 }

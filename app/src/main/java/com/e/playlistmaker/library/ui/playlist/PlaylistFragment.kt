@@ -25,13 +25,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistFragment : Fragment() {
 
-    companion object {
-        const val PLAYLIST = "playlist"
-        const val CLICK_DEBOUNCE_DELAY = 1000L
-
-        fun createArgs(playlistId: Int): Bundle = bundleOf(PLAYLIST to playlistId)
-    }
-
     private val viewModel by viewModel<PlaylistViewModel>()
     private lateinit var onTrackClickDebounce: (Track) -> Unit
     private lateinit var deleteTrackDialog: MaterialAlertDialogBuilder
@@ -236,5 +229,12 @@ class PlaylistFragment : Fragment() {
         binding.bottomSheetTracks.text = tracksCount
         binding.suffix.visibility = if (visibilityForSuffix) View.VISIBLE else View.GONE
         binding.tracksBottomSheet.visibility = if (visibilityForSuffix) View.VISIBLE else View.GONE
+    }
+
+    companion object {
+        const val PLAYLIST = "playlist"
+        const val CLICK_DEBOUNCE_DELAY = 1000L
+
+        fun createArgs(playlistId: Int): Bundle = bundleOf(PLAYLIST to playlistId)
     }
 }

@@ -18,16 +18,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoriteTracksFragment : Fragment() {
 
-    companion object {
-
-        fun newInstance() = FavoriteTracksFragment().apply {
-            arguments = Bundle().apply {
-            }
-        }
-
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
-    }
-
     private val viewModel by viewModel<FavoriteTracksViewModel>()
 
     private lateinit var binding: FragmentFavoriteTracksBinding
@@ -93,5 +83,15 @@ class FavoriteTracksFragment : Fragment() {
             R.id.action_libraryFragment_to_audioPlayerFragment,
             AudioPlayerFragment.createArgs(trackId)
         )
+    }
+
+    companion object {
+
+        fun newInstance() = FavoriteTracksFragment().apply {
+            arguments = Bundle().apply {
+            }
+        }
+
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
