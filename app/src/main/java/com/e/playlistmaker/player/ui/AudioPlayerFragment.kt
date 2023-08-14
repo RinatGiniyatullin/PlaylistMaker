@@ -207,6 +207,7 @@ class AudioPlayerFragment : Fragment() {
     }
 
     private fun showTrackCover(image: String) {
+
         Glide.with(binding.cover)
             .load(image)
             .placeholder(R.drawable.cover_placeholder)

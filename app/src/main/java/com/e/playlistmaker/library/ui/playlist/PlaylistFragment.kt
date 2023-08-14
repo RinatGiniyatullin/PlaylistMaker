@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.MarginLayoutParams
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -22,6 +23,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class PlaylistFragment : Fragment() {
 
@@ -51,7 +53,7 @@ class PlaylistFragment : Fragment() {
         val playlistId = requireArguments().getInt(PLAYLIST)
         viewModel.loadPlaylist(playlistId)
         initAdapter()
-        viewModel.info.observe(viewLifecycleOwner) { info ->
+        viewModel.playlistInfo.observe(viewLifecycleOwner) { info ->
             when (info) {
                 is PlaylistInfo.Info -> showPage(
                     info.cover,
@@ -69,7 +71,7 @@ class PlaylistFragment : Fragment() {
             back()
         }
 
-        viewModel.back.observe(viewLifecycleOwner) { result ->
+        viewModel.isPlaylistDeleted.observe(viewLifecycleOwner) { result ->
             if (result) back()
         }
 
@@ -136,6 +138,7 @@ class PlaylistFragment : Fragment() {
 
         binding.bottomSheetShare.setOnClickListener {
             share()
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         }
 
         deletePlaylistDialog = MaterialAlertDialogBuilder(requireActivity())
@@ -194,6 +197,18 @@ class PlaylistFragment : Fragment() {
         binding.recyclerView.adapter = adapter
     }
 
+    private fun setMargins(view: View, left: Int, top: Int, right: Int, bottom: Int) {
+        if (view.layoutParams is MarginLayoutParams) {
+            val p = view.layoutParams as MarginLayoutParams
+            p.setMargins(left, top, right, bottom)
+            view.requestLayout()
+        }
+    }
+
+    private fun dpToPixel(dpResources: Int): Int {
+        return requireContext().resources.getDimensionPixelSize(dpResources)
+    }
+
     private fun showPage(
         cover: String,
         title: String,
@@ -201,7 +216,7 @@ class PlaylistFragment : Fragment() {
         time: String,
         tracksCount: String,
         tracks: List<Track>,
-        visibilityForSuffix: Boolean,
+        visibilityForEmptyTracks: Boolean,
     ) {
         image = cover
         if (cover.isNotEmpty()) {
@@ -209,7 +224,6 @@ class PlaylistFragment : Fragment() {
                 .load(cover.toUri())
                 .placeholder(R.drawable.cover_placeholder)
                 .into(binding.cover)
-
             Glide.with(binding.bottomSheetCover)
                 .load(cover.toUri())
                 .placeholder(R.drawable.cover_placeholder)
@@ -218,7 +232,14 @@ class PlaylistFragment : Fragment() {
         }
         binding.title.text = title
         binding.description.text = description
-        binding.time.text = time
+
+        if (time.isEmpty()) {
+            binding.time.visibility = View.GONE
+            setMargins(binding.tracks, 0, dpToPixel(R.dimen.margin_8), 0, 0)
+        } else {
+            binding.time.text = time
+        }
+
         binding.tracks.text = tracksCount
 
         adapter.audio.clear()
@@ -227,8 +248,9 @@ class PlaylistFragment : Fragment() {
 
         binding.bottomSheetTitle.text = title
         binding.bottomSheetTracks.text = tracksCount
-        binding.suffix.visibility = if (visibilityForSuffix) View.VISIBLE else View.GONE
-        binding.tracksBottomSheet.visibility = if (visibilityForSuffix) View.VISIBLE else View.GONE
+        binding.suffix.visibility = if (visibilityForEmptyTracks) View.VISIBLE else View.GONE
+        binding.tracksBottomSheetContainer.visibility =
+            if (visibilityForEmptyTracks) View.VISIBLE else View.GONE
     }
 
     companion object {

@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import com.e.playlistmaker.R
 import com.e.playlistmaker.databinding.FragmentListPlaylistsBinding
 import com.e.playlistmaker.library.domain.Playlist
@@ -40,8 +39,8 @@ class ListPlaylistsFragment : Fragment() {
 
         binding.newPlaylist.setOnClickListener { findNavController().navigate(R.id.action_libraryFragment_to_newPlaylistFragment) }
 
-        binding.recyclerView.layoutManager = GridLayoutManager(requireActivity(), 2)
         binding.recyclerView.adapter = adapter
+        binding.recyclerView.addItemDecoration(PlaylistsOffsetItemDecoration(requireContext()))
 
         adapter.itemClickListener = { playlist ->
             onPlaylistClickDebounce(playlist)

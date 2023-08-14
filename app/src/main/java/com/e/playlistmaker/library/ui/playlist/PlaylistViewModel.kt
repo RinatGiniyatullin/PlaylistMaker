@@ -8,6 +8,8 @@ import com.e.playlistmaker.library.domain.playlist.PlaylistInteractor
 import com.e.playlistmaker.player.ui.DateTimeFormatter
 import com.e.playlistmaker.search.domain.Track
 import com.e.playlistmaker.sharing.domain.SharingInteractor
+import createMinutesCountString
+import createTracksCountString
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -17,11 +19,11 @@ class PlaylistViewModel(
     private val sharingInteractor: SharingInteractor,
 ) : ViewModel() {
 
-    private val _info = MutableLiveData<PlaylistInfo>()
-    val info: LiveData<PlaylistInfo> = _info
+    private val _playlistInfo = MutableLiveData<PlaylistInfo>()
+    val playlistInfo: LiveData<PlaylistInfo> = _playlistInfo
 
-    private val _back = MutableLiveData<Boolean>()
-    val back: LiveData<Boolean> = _back
+    private val _isPlaylistDeleted = MutableLiveData<Boolean>()
+    val isPlaylistDeleted: LiveData<Boolean> = _isPlaylistDeleted
 
     fun loadPlaylist(playlistId: Int) {
 
@@ -44,9 +46,9 @@ class PlaylistViewModel(
 
             tracksCount = createTracksValue(listTracks.size)
 
-            val visibilityForSuffix = listTracks.size != 0
+            val visibilityForEmptyTracks = listTracks.size != 0
 
-            _info.postValue(
+            _playlistInfo.postValue(
                 PlaylistInfo.Info(
                     cover,
                     title,
@@ -54,7 +56,7 @@ class PlaylistViewModel(
                     time,
                     tracksCount,
                     listTracks,
-                    visibilityForSuffix
+                    visibilityForEmptyTracks
                 )
             )
         }
@@ -72,30 +74,16 @@ class PlaylistViewModel(
         ).format(timeAllTracks).toInt()
 
         return when (value) {
-            0 -> "Треков нет"
-            11, 12, 13, 14, 15, 16, 17, 18, 19 -> "$value минут"
-            else -> when (value % 10) {
-                1 -> "$value минута"
-                2, 3, 4 -> "$value минуты"
-                5, 6, 7, 8, 9, 0 -> "$value минут"
-                else -> ""
-            }
+            0 -> ""
+            else -> createMinutesCountString(value)
         }
     }
 
     private fun createTracksValue(size: Int): String {
         return if (size == 0) {
-            ""
+            "Треков нет"
         } else {
-            when (size) {
-                11, 12, 13, 14, 15, 16, 17, 18, 19 -> "$size треков"
-                else -> when (size % 10) {
-                    1 -> "$size трек"
-                    2, 3, 4 -> "$size трека"
-                    5, 6, 7, 8, 9, 0 -> "$size треков"
-                    else -> ""
-                }
-            }
+            createTracksCountString(size)
         }
     }
 
@@ -161,7 +149,7 @@ class PlaylistViewModel(
     fun deletePlaylist(playlistId: Int) {
         viewModelScope.launch {
             interactor.deletePlaylist(playlistId).collect { result ->
-                _back.postValue(result)
+                _isPlaylistDeleted.postValue(result)
             }
         }
     }

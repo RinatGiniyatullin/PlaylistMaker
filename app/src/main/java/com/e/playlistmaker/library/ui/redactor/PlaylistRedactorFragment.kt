@@ -21,16 +21,15 @@ class PlaylistRedactorFragment : NewPlaylistFragment() {
         val description = requireArguments().getString(DESCRIPTION)
         val playlistId = requireArguments().getInt(ID)
 
-        if (cover!!.isNotEmpty()) {
+        binding.cover.background = null
+        binding.image.visibility = View.GONE
 
-            binding.cover.background = null
-            binding.image.visibility = View.GONE
-            Glide.with(binding.cover)
-                .load(cover.toUri())
-                .placeholder(R.drawable.cover_placeholder)
-                .transform(RoundedCorners(resources.getDimensionPixelSize(R.dimen.margin_8)))
-                .into(binding.cover)
-        }
+        Glide.with(binding.cover)
+            .load(cover!!.toUri())
+            .placeholder(R.drawable.cover_placeholder)
+            .transform(RoundedCorners(resources.getDimensionPixelSize(R.dimen.margin_8)))
+            .into(binding.cover)
+
         binding.title.setText(title)
         binding.description.setText(description)
         binding.createButton.text = getString(R.string.save)

@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingStart="@dimen/margin_12"
+    android:paddingEnd="@dimen/margin_12"
     tools:context=".library.ui.listPlaylists.ListPlaylistsFragment">
 
     <androidx.constraintlayout.widget.Guideline
@@ -28,14 +30,15 @@
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="@dimen/margin_16"
         android:layout_marginTop="@dimen/margin_16"
-        android:layout_marginEnd="@dimen/margin_8"
-        android:layout_marginBottom="@dimen/margin_16"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/new_playlist"
+        app:layout_constraintVertical_bias="0.1"
+        app:spanCount="2"
         tools:listitem="@layout/playlist_item" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
