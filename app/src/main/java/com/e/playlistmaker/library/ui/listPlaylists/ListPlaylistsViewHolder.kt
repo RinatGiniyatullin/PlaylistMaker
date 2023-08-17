@@ -1,4 +1,4 @@
-package com.e.playlistmaker.library.ui.playlist
+package com.e.playlistmaker.library.ui.listPlaylists
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -6,8 +6,9 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.e.playlistmaker.R
 import com.e.playlistmaker.databinding.PlaylistItemBinding
 import com.e.playlistmaker.library.domain.Playlist
+import createTracksCountString
 
-class PlaylistViewHolder(private val binding: PlaylistItemBinding) : RecyclerView.ViewHolder(
+class ListPlaylistsViewHolder(private val binding: PlaylistItemBinding) : RecyclerView.ViewHolder(
     binding.root
 ) {
 
@@ -20,17 +21,7 @@ class PlaylistViewHolder(private val binding: PlaylistItemBinding) : RecyclerVie
             .into(binding.image)
 
         binding.title.text = model.title
-        binding.numberTracks.text = mapText(model.numberOfTracks)
-    }
-
-    private fun mapText(numberOfTracks: Int): String {
-        var text = ""
-        when (numberOfTracks % 10) {
-            1 -> text = "$numberOfTracks трек"
-            2, 3, 4 -> text = "$numberOfTracks трека"
-            5, 6, 7, 8, 9, 0 -> text = "$numberOfTracks треков"
-        }
-        return text
+        binding.numberTracks.text = createTracksCountString(model.numberOfTracks)
     }
 }
 

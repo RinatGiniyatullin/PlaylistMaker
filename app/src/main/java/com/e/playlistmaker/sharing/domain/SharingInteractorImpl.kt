@@ -10,6 +10,10 @@ class SharingInteractorImpl(
         externalNavigator.shareLink(getShareAppLink())
     }
 
+    override fun shareAppWithMessage(message: String) {
+        externalNavigator.shareLink(message)
+    }
+
     override fun openTerms() {
         externalNavigator.openLink(getTermsLink())
     }
@@ -19,7 +23,7 @@ class SharingInteractorImpl(
     }
 
     private fun getShareAppLink(): String {
-     return APP_LINK
+        return APP_LINK
     }
 
     private fun getSupportEmailData(): EmailData {
@@ -27,11 +31,11 @@ class SharingInteractorImpl(
     }
 
     private fun getTermsLink(): String {
-       return TERMS_LINK
+        return TERMS_LINK
 
     }
 
-    companion object{
+    companion object {
         private val MY_EMAIL = "rin63@mail.ru"
         private val APP_LINK = "https://practicum.yandex.ru/android-developer/"
         private val TERMS_LINK = "https://yandex.ru/legal/practicum_offer/"

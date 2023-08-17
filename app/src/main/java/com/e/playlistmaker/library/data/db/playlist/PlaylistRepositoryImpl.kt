@@ -2,7 +2,6 @@ package com.e.playlistmaker.library.data.db.playlist
 
 import com.e.playlistmaker.library.data.db.AppDatabase
 import com.e.playlistmaker.library.data.db.entity.PlaylistEntity
-import com.e.playlistmaker.library.data.db.entity.TrackEntity
 import com.e.playlistmaker.library.data.db.entity.TrackForPlaylistEntity
 import com.e.playlistmaker.library.domain.Playlist
 import com.e.playlistmaker.library.domain.playlist.PlaylistRepository
@@ -10,6 +9,8 @@ import com.e.playlistmaker.search.domain.Track
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 class PlaylistRepositoryImpl(private val database: AppDatabase) : PlaylistRepository {
@@ -32,6 +33,76 @@ class PlaylistRepositoryImpl(private val database: AppDatabase) : PlaylistReposi
     override suspend fun getPlaylists(): Flow<List<Playlist>> {
         val playlistFlow = database.playlistDao().getPlaylists()
         return playlistFlow.map { list -> list.map { mapToPlaylist(it) } }
+    }
+
+    override suspend fun getPlaylistById(playlistId: Int): Playlist {
+        return mapToPlaylist(database.playlistDao().getPlaylistById(playlistId))
+    }
+
+    override suspend fun getTracksForPlaylist(tracksId: List<String>): List<Track> {
+        val allTracks = mutableListOf<Track>()
+        val list = database.tracksForPlaylistDao().getTracksForPlaylists()
+            .map { list -> mapToTracks(list) }
+        for (track in list) {
+            if (tracksId.contains(track.trackId)) {
+                allTracks.add(track)
+            }
+        }
+        return allTracks
+    }
+
+    override fun deleteTrack(trackId: String, playlistId: Int): Flow<Int> = flow {
+        val playlist = mapToPlaylist(database.playlistDao().getPlaylistById(playlistId))
+        playlist.tracksId.remove(trackId)
+        playlist.numberOfTracks -= 1
+        database.playlistDao().updatePlaylist(mapToEntityPlaylist(playlist))
+        checkTracksForPlaylistDB(listOf(trackId))
+        emit(playlistId)
+    }
+
+    override fun deletePlaylist(playlistId: Int): Flow<Boolean> = flow {
+
+        val playlist = mapToPlaylist(database.playlistDao().getPlaylistById(playlistId))
+        val listTrackId = playlist.tracksId
+        database.playlistDao().deletePlaylist(playlistId)
+        checkTracksForPlaylistDB(listTrackId)
+        emit(true)
+    }
+
+    override fun updatePlaylistInfo(
+        playlistId: Int,
+        uri: String,
+        title: String,
+        description: String,
+    ): Flow<Boolean> = flow {
+        val playlist = mapToPlaylist(database.playlistDao().getPlaylistById(playlistId))
+        val newPlaylist = Playlist(
+            playlistId, title, description, uri, playlist.tracksId, playlist.numberOfTracks
+        )
+        database.playlistDao().updatePlaylist(mapToEntityPlaylist(newPlaylist))
+        emit(true)
+    }
+
+    private suspend fun checkTracksForPlaylistDB(listTrackId: List<String>) {
+
+        val set = mutableSetOf<String>()
+        val listPlaylists = database.playlistDao().getPlaylists().firstOrNull()
+            ?.let { it.map { mapToPlaylist(it) } }
+        if (listPlaylists != null) {
+            for (playlist in listPlaylists) {
+                for (listTracks in playlist.tracksId) {
+                    set.addAll(listOf(listTracks))
+                }
+            }
+            for (trackId in listTrackId) {
+                if (set.contains(trackId)) {
+                } else {
+                    database.tracksForPlaylistDao().deleteTrack(trackId)
+                }
+            }
+        } else {
+            return
+        }
     }
 
     private fun mapToEntityPlaylist(playlist: Playlist): PlaylistEntity {
@@ -64,7 +135,8 @@ class PlaylistRepositoryImpl(private val database: AppDatabase) : PlaylistReposi
 
     private fun createListFromString(tracksId: String): MutableList<String> {
         val myType = object : TypeToken<MutableList<String>>() {}.type
-        val listTracksId = Gson().fromJson<MutableList<String>>(tracksId, myType).toMutableList()
+        val listTracksId =
+            Gson().fromJson<MutableList<String>>(tracksId, myType).toMutableList()
         return listTracksId
     }
 
@@ -83,18 +155,18 @@ class PlaylistRepositoryImpl(private val database: AppDatabase) : PlaylistReposi
         )
     }
 
-    private fun mapToTracks(trackEntity: TrackEntity): Track {
+    private fun mapToTracks(trackForPlaylistEntity: TrackForPlaylistEntity): Track {
         return Track(
-            trackId = trackEntity.trackId,
-            trackName = trackEntity.trackName,
-            artistName = trackEntity.artistName,
-            trackTimeMillis = trackEntity.trackTimeMillis,
-            artworkUrl100 = trackEntity.artworkUrl100,
-            collectionName = trackEntity.collectionName,
-            releaseDate = trackEntity.releaseDate,
-            previewUrl = trackEntity.previewUrl,
-            primaryGenreName = trackEntity.primaryGenreName,
-            country = trackEntity.country
+            trackId = trackForPlaylistEntity.trackId,
+            trackName = trackForPlaylistEntity.trackName,
+            artistName = trackForPlaylistEntity.artistName,
+            trackTimeMillis = trackForPlaylistEntity.trackTimeMillis,
+            artworkUrl100 = trackForPlaylistEntity.artworkUrl100,
+            collectionName = trackForPlaylistEntity.collectionName,
+            releaseDate = trackForPlaylistEntity.releaseDate,
+            previewUrl = trackForPlaylistEntity.previewUrl,
+            primaryGenreName = trackForPlaylistEntity.primaryGenreName,
+            country = trackForPlaylistEntity.country
         )
     }
 }

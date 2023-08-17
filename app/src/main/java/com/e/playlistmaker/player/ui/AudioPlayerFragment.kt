@@ -15,8 +15,8 @@ import com.e.playlistmaker.R
 import com.e.playlistmaker.databinding.FragmentAudioPlayerBinding
 import com.e.playlistmaker.library.domain.Playlist
 import com.e.playlistmaker.library.ui.newPlaylist.NewPlaylistViewModel
-import com.e.playlistmaker.library.ui.playlist.PlaylistState
-import com.e.playlistmaker.library.ui.playlist.PlaylistViewModel
+import com.e.playlistmaker.library.ui.listPlaylists.ListPlaylistsState
+import com.e.playlistmaker.library.ui.listPlaylists.ListPlaylistsViewModel
 import com.e.playlistmaker.player.ui.DateTimeFormatter.PROGRESS_FORMAT
 import com.e.playlistmaker.search.domain.Track
 import com.e.playlistmaker.search.ui.SearchViewModel
@@ -27,17 +27,11 @@ import java.util.Locale
 
 class AudioPlayerFragment : Fragment() {
 
-    companion object {
-        const val TRACK_ID = "trackId"
-
-        fun createArgs(trackId: String): Bundle = bundleOf(TRACK_ID to trackId)
-    }
-
     private lateinit var binding: FragmentAudioPlayerBinding
     private val viewModel by viewModel<PlayerViewModel>()
     private val searchViewModel by viewModel<SearchViewModel>()
     private val newPlaylistViewModel by viewModel<NewPlaylistViewModel>()
-    private val playlistViewModel by viewModel<PlaylistViewModel>()
+    private val listPlaylistsViewModel by viewModel<ListPlaylistsViewModel>()
 
     private val adapter = PlayerAdapter()
 
@@ -71,11 +65,11 @@ class AudioPlayerFragment : Fragment() {
 
         binding.addButton.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-            playlistViewModel.showPlaylist()
-            playlistViewModel.state.observe(viewLifecycleOwner) { state ->
+            listPlaylistsViewModel.showPlaylist()
+            listPlaylistsViewModel.state.observe(viewLifecycleOwner) { state ->
                 when (state) {
-                    PlaylistState.Empty -> showEmptyResult()
-                    is PlaylistState.Playlists -> showPlaylists(state.playlists)
+                    ListPlaylistsState.Empty -> showEmptyResult()
+                    is ListPlaylistsState.Playlists -> showPlaylists(state.playlists)
                 }
             }
         }
@@ -133,7 +127,7 @@ class AudioPlayerFragment : Fragment() {
         }
 
         viewModel.showTrackLiveData.observe(viewLifecycleOwner) { track ->
-            showTrackCover(track.getCoverArtwork())
+            showTrackCover(track.getCoverArtwork512())
             showTrackName(track.trackName)
             showArtistName(track.artistName)
 
@@ -213,6 +207,7 @@ class AudioPlayerFragment : Fragment() {
     }
 
     private fun showTrackCover(image: String) {
+
         Glide.with(binding.cover)
             .load(image)
             .placeholder(R.drawable.cover_placeholder)
@@ -263,5 +258,11 @@ class AudioPlayerFragment : Fragment() {
 
     private fun updateProgressTime(currentTime: String) {
         binding.progressTime.text = currentTime
+    }
+
+    companion object {
+        const val TRACK_ID = "trackId"
+
+        fun createArgs(trackId: String): Bundle = bundleOf(TRACK_ID to trackId)
     }
 }

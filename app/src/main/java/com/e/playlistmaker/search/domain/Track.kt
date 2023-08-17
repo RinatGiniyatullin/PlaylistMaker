@@ -15,10 +15,11 @@ data class Track(
     val primaryGenreName: String,
     val country: String,
     val previewUrl: String,
-    var isFavorite: Boolean = false
-): Parcelable {
+    var isFavorite: Boolean = false,
+) : Parcelable {
 
-    fun getCoverArtwork() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
+    fun getCoverArtwork512() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
+    fun getCoverArtwork60() = artworkUrl100.replaceAfterLast('/', "60x60bb.jpg")
 
     fun getReleaseDateOnlyYear(): String {
         val answer = releaseDate.split("-")

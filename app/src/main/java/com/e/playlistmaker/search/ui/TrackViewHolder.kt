@@ -10,16 +10,27 @@ import com.e.playlistmaker.search.domain.Track
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TrackViewHolder(private val binding: TracksViewBinding) : RecyclerView.ViewHolder(
-binding.root) {
+class TrackViewHolder(private val binding: TracksViewBinding, private val isHightQuality: Boolean) :
+    RecyclerView.ViewHolder(
+        binding.root
+    ) {
 
     fun bind(model: Track) {
-        Glide.with(itemView)
-            .load(model.getCoverArtwork())
-            .placeholder(R.drawable.cover_placeholder)
-            .centerCrop()
-            .transform(RoundedCorners(2))
-            .into(binding.trackCover)
+        if (isHightQuality) {
+            Glide.with(itemView)
+                .load(model.getCoverArtwork512())
+                .placeholder(R.drawable.cover_placeholder)
+                .centerCrop()
+                .transform(RoundedCorners(2))
+                .into(binding.trackCover)
+        } else {
+            Glide.with(itemView)
+                .load(model.getCoverArtwork60())
+                .placeholder(R.drawable.cover_placeholder)
+                .centerCrop()
+                .transform(RoundedCorners(2))
+                .into(binding.trackCover)
+        }
 
         binding.trackName.text = model.trackName
         binding.artistName.text = model.artistName

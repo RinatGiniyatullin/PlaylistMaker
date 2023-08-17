@@ -15,6 +15,7 @@ class SearchViewModel(
 ) : ViewModel() {
 
     private val historyTracks = mutableListOf<Track>()
+    private var latestSearchText: String? = null
 
     private val _state = MutableLiveData<SearchState>()
     val state: LiveData<SearchState> = _state
@@ -51,12 +52,16 @@ class SearchViewModel(
         if (query.isEmpty()) {
             return
         }
+        if (latestSearchText == query) {
+            return
+        }
         _state.postValue(SearchState.Loading)
 
         viewModelScope.launch {
             try {
                 interactor.loadTracks(query = query)
                     .collect { positiveResult(it) }
+                latestSearchText = query
             } catch (e: Exception) {
                 errorResult()
             }
