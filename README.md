@@ -1,4 +1,6 @@
 # PlaylistMaker
+Этот проект выполнен в процессе обучения по специальности Android разработчик под руководством наставника. В процессе выполнения проводились промежуточные ревью опытными разработчиками.
+
 Приложение позволяет:
 ### 1) осуществлять поиск треков:
 
@@ -23,13 +25,17 @@
 ### 6) просматривать детали плейлистов,
 ### 7) добавлять треки в плейлисты и удалять их,
 ### 8) делиться информацией со списком контактов:
-    
-      ![Детали плейлиста](https://github.com/RinatGiniyatullin/PlaylistMaker/assets/67383564/9f8b7425-992c-4991-90ae-d0061cdcdcd8)
+
+   ![Детали плейлиста](https://github.com/RinatGiniyatullin/PlaylistMaker/assets/67383564/781c9a93-eb7e-4af5-8deb-175bfa7800cb)
 
 ### 9) настраивать приложение: настроить тему, поделиться приложением, написать в поддержку и прочитать пользовательское соглашение:
     
-    ![Настройки](https://github.com/RinatGiniyatullin/PlaylistMaker/assets/67383564/c1e3ad41-3a7b-4ae4-b693-1ec157ad20a0)
+   ![Настройки](https://github.com/RinatGiniyatullin/PlaylistMaker/assets/67383564/c1e3ad41-3a7b-4ae4-b693-1ec157ad20a0)
 
 
-### Для реализации функционала были использованы:
+### Для реализации функционала был использован следующий стек технологий:
 XML, Retrofit, RecyclerView, MediaPlayer, SharedPreferences, SQLite, Room, Clean Architecture, MVVM, Coroutines, Koin, Permissions
+
+### Общие требования
+
+- Приложение поддерживает устройства, начиная с Android 7 (minSdkVersion = 24)
